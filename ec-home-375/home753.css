@@ -1,0 +1,83 @@
+/* Figma section 753:32871. Existing animation rules remain in home344.css/color-story.css. */
+.home753{font-family:'Aktiv Grotesk','Noto Sans CJK SC';font-synthesis:none}
+.home753 .h344-kv-copy{left:16px;right:16px}
+.home753 .h344-heading h2{font-family:'Aktiv Grotesk','Noto Sans CJK SC';font-size:20px;line-height:28px;font-weight:500;letter-spacing:0}
+.home753 .h344-product-name,.home753 .h344-price,.home753 .cs-product strong,.home753 .cs-product small{font-size:12px;line-height:16px;font-weight:400;letter-spacing:0}
+.home753 .h344-product.popular .h344-swatches{margin-top:8px}.home753 .h344-product.popular .h344-product-name{margin-top:8px}.home753 .h344-popular-grid{grid-auto-rows:266px}
+.home753 .h344-new-visual:after{display:none}
+.h753-restore-copy{position:absolute;top:319.1px;left:16px;right:16px;z-index:2;color:#f8f8f8;pointer-events:none}
+.h753-restore-copy h3{font-size:32px;line-height:40px;font-weight:300}.h753-restore-copy h3 span{font-weight:500}.h753-restore-copy h3 em{font-style:normal;font-weight:400}
+.h753-restore-copy>p{font-size:20px;line-height:28px;font-weight:500;margin-top:8px}
+.h753-restore-copy .h344-new-add{margin-top:16px;min-width:143px;padding:0 48px;pointer-events:auto;font-size:12px;line-height:18px}
+.home753 .h753-scene{padding-top:31.9px;padding-bottom:0}
+.home753 .h753-scene .h344-heading{margin-bottom:22.5px}
+.h753-scene-stage{position:relative;height:520px;overflow:hidden}
+.h753-scene-stage>img{height:100%;width:100%;object-fit:cover}
+.h753-scene-shade{position:absolute;inset:0;background:#3333;pointer-events:none}
+.h753-scene-controls{position:absolute;left:24px;right:24px;top:50%;transform:translateY(-50%);display:flex;align-items:center;justify-content:space-between}
+.h753-scene-modes{display:flex;flex-direction:column;align-items:flex-start}
+.h753-scene-modes button{font-family:'Aktiv Grotesk';font-size:48px;line-height:normal;font-weight:500;letter-spacing:-.96px;color:#f8f8f84d;text-align:left}
+.h753-scene-modes button.active{color:#f8f8f8}
+.h753-scene-lines{display:flex;flex-direction:column;align-items:flex-end}.h753-scene-lines button{width:32px;height:13px;display:flex;align-items:center;justify-content:flex-end}
+.h753-scene-lines i{display:block;background:#f8f8f880;width:12px;height:1px}.h753-scene-lines .active i{width:24px;background:#f8f8f8}
+.h753-scene-modes button:focus-visible,.h753-scene-lines button:focus-visible{outline:1px solid #fff;outline-offset:2px}
+.h753-scene-products{height:255px;margin-top:16.64px;align-items:center;gap:2px}
+.home753 .h753-scene .h344-more{margin-top:18.64px}
+.home753 .cs-caption{top:50.763%;justify-content:flex-start}.home753 .cs-caption h3{font-size:16px;line-height:22px;font-weight:500}
+.home753 .cs-products{top:57.717%}.home753 .cs-progress{display:none}
+.home753 .h753-outfit .h344-heading{margin-bottom:18px}
+.home753 .h344-outfit:after{content:"";position:absolute;inset:0;background:#0003;pointer-events:none}
+.home753 .h344-outfit .h344-hotspot,.home753 .h344-outfit .h344-three-lines{z-index:1}
+.h753-outfit-next{position:absolute;right:16px;top:220px;width:28px;height:28px;border-radius:14px;background:#3333334d;display:grid;place-items:center;z-index:2}.h753-outfit-next>img{width:auto;height:auto;max-width:none}
+.h753-outfit-products{height:269px;align-items:center;gap:2px;margin-top:16px}.home753 .h753-outfit .h344-more{margin-top:32px}
+.home753 .hl-gifts{min-height:648px;padding-bottom:0}
+.home753 .h344-fabric-banner{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
+.home753 .h344-fabric-banner>span{font-size:24px;line-height:normal;z-index:1;position:relative}
+.h753-fabric-features{position:relative;display:flex;gap:16px;align-items:center;justify-content:center;color:#f8f8f8}
+.h753-fabric-features>span{display:flex;align-items:center;gap:8px;font-size:10px;line-height:14px;font-weight:400;white-space:nowrap}
+.h753-fabric-features img{position:static;inset:auto;flex-shrink:0;width:14px;height:14px;object-fit:contain}
+.home753 .h344-fabric .h344-more{margin-top:32px}
+.h753-sticky{position:absolute;left:0;right:0;top:0;height:124px;z-index:6;background:#fff;color:#333;visibility:hidden;pointer-events:none}
+.has-home753-sticky .h753-sticky{visibility:visible;pointer-events:auto}
+.has-home753-sticky .h344-home .h344-genders{visibility:hidden;pointer-events:none}
+.h753-system{height:44px;display:flex;justify-content:space-between;align-items:flex-start;padding:14px 23px 0;font-size:12px;line-height:18px;font-weight:500}
+.h753-system>span:last-child{display:flex;align-items:center;gap:6px;height:15px}.h753-system img{width:auto;height:auto;max-height:12px}
+.h753-nav-header{height:44px;position:relative;display:flex;align-items:center;justify-content:space-between;padding:0 20px}
+.h753-nav-header>button{display:flex;align-items:center;gap:2px;font-size:10px;line-height:14px;font-weight:400;min-height:40px}
+.h753-bell{width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0}.h753-bell img{width:auto;height:auto;transform:translateY(.67px)}
+.h753-logo-wrap{width:100px;padding-left:10px;flex-shrink:0}.h753-logo{display:block;width:90px;height:20px;object-fit:contain;object-position:bottom}
+.h753-capsule{display:flex;align-items:center;justify-content:space-evenly;width:82px;height:30px;background:#fff;border:.75px solid #3333331a;border-radius:20px}
+.h753-capsule>img{width:auto;height:auto;max-width:22px;max-height:20px}.h753-capsule i{height:17px;width:1px;background:#5a5a5a1a}
+.h753-genders{height:36px;display:flex;gap:60px;align-items:stretch;justify-content:center}
+.h753-genders button{width:48px;height:36px;display:flex;justify-content:center;align-items:center;font-size:16px;line-height:22px;font-weight:400;color:#868686;border-bottom:1px solid transparent}
+.h753-genders button.selected{color:#333;font-weight:400;border-color:#333}
+.home753 .h344-home button:focus-visible{outline:1px solid currentColor;outline-offset:2px}
+.export-mode .h753-sticky{display:none}
+@media(max-width:350px){.h753-fabric-features{gap:10px}.h753-fabric-features>span{gap:4px}.h753-restore-copy>p{font-size:20px}.h753-nav-header{padding-inline:16px}}
+
+/* Second full-screen KV: keep the 375 × 812 Figma canvas and shared typography. */
+.h366-carousel{position:relative;height:812px;outline-offset:-2px}
+.h366-track{display:flex;height:812px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
+.h366-track::-webkit-scrollbar{display:none}
+.h366-slide{position:relative;flex:0 0 100%;width:100%;min-width:0;scroll-snap-align:start;scroll-snap-stop:always}
+.h366-track.is-dragging{scroll-snap-type:none;cursor:grabbing;user-select:none}
+.h366-track img{-webkit-user-drag:none}
+.h366-background{position:absolute;inset:0;pointer-events:none}
+.h366-background>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.h366-pagination{display:flex;width:128px;height:40px;align-items:center;position:relative}
+.h366-pagination:before{content:'';position:absolute;left:0;right:0;top:19px;height:2px;background:#ffffff80}
+.h366-pagination button{position:relative;height:40px;width:64px;display:flex;align-items:center;background:transparent;justify-content:flex-start}
+.h366-pagination button:last-child{justify-content:flex-end}
+.h366-pagination i{display:block;height:2px;width:32px;background:transparent;transition:background .3s}
+.h366-pagination [aria-pressed="true"] i{background:#fff}
+.h366-sr{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+@media(prefers-reduced-motion:reduce){.h366-pagination i{transition:none}}
+
+/* Figma 448:12891 — women-first scene, exact visible crop layers. */
+.h753-scene .h344-genders button{min-height:0;height:24.75px;font-weight:500;border-bottom-width:.75px}
+.h753-scene .scene-women-card .h344-product-media{height:169.547px;overflow:hidden;position:relative}
+.h753-scene .scene-women-card .h344-product-media img{height:169.682px;position:relative;top:-.135px}
+.h753-scene .scene-women-card:nth-child(2) .h344-product-media{height:169.682px}
+.h753-scene .scene-women-card:nth-child(2) .h344-product-media img{top:0}
+.h753-scene .scene-women-card:nth-child(3) .h344-product-media img{top:-2.24px}
+.h753-scene .scene-women-card .h344-swatches button[aria-pressed=true]:before{background-image:url('assets/scene448/imgGroup1912056221.svg')}

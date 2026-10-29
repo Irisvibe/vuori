@@ -1,0 +1,9 @@
+if(new URLSearchParams(location.search).has('screen'))document.body.classList.add('screen');
+const dialog=document.querySelector('.quick-dialog');
+let selectedSize='',bagCount=0,toastTimer;
+const demoProducts={halo:{name:'Halo Essential Wideleg',desc:'女士柔软阔腿长裤 · 樱桃深红',price:'¥ 980',image:'assets/halo-studio.png'},strato:{name:'Strato Tech Tee',desc:'男士轻盈运动短袖 · 海岸蓝',price:'¥ 580',image:'assets/strato-tee.png'}};
+function openQuickAdd(key){const p=demoProducts[key];selectedSize='';dialog.querySelector('img').src=p.image;dialog.querySelector('img').alt=p.name;dialog.querySelector('h3').textContent=p.name;dialog.querySelector('.dialog-description').textContent=p.desc;dialog.querySelector('.price').textContent=p.price;dialog.querySelectorAll('.size-options button').forEach(b=>{b.classList.remove('selected');b.setAttribute('aria-pressed','false')});dialog.querySelector('.confirm-add').disabled=true;dialog.showModal();}
+document.querySelectorAll('[data-quick-add]').forEach(b=>b.addEventListener('click',()=>openQuickAdd(b.dataset.quickAdd)));
+dialog.querySelector('.dialog-close').addEventListener('click',()=>dialog.close());
+dialog.querySelectorAll('.size-options button').forEach(b=>b.addEventListener('click',()=>{selectedSize=b.textContent;dialog.querySelectorAll('.size-options button').forEach(x=>{x.classList.toggle('selected',x===b);x.setAttribute('aria-pressed',String(x===b))});dialog.querySelector('.confirm-add').disabled=false}));
+dialog.querySelector('.confirm-add').addEventListener('click',()=>{if(!selectedSize)return;bagCount++;document.querySelectorAll('.bag-count').forEach(x=>{x.hidden=false;x.textContent=bagCount});dialog.close();const toast=document.querySelector('.toast');toast.hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>{toast.hidden=true},2400)});
