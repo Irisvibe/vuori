@@ -1,0 +1,46 @@
+{
+  "node": "1670:2494",
+  "downloaded": "2026-10-27",
+  "assets": [
+    {
+      "name": "imgGroup2",
+      "file": "imgGroup2.svg",
+      "url": "https://www.figma.com/api/mcp/asset/50ac329f-50a9-4933-962c-e85bdab5b54e.svg"
+    },
+    {
+      "name": "imgFill43",
+      "file": "imgFill43.svg",
+      "url": "https://www.figma.com/api/mcp/asset/db209a11-bf02-4f81-a221-ee69251d8dbe.svg"
+    },
+    {
+      "name": "imgCap",
+      "file": "imgCap.svg",
+      "url": "https://www.figma.com/api/mcp/asset/eb0f9c46-f580-464c-a523-0b70b8a9d754.svg"
+    },
+    {
+      "name": "imgWifi",
+      "file": "imgWifi.svg",
+      "url": "https://www.figma.com/api/mcp/asset/6a9cad3d-e66c-46e2-97c8-8e02e59c67ae.svg"
+    },
+    {
+      "name": "imgCellularConnection",
+      "file": "imgCellularConnection.svg",
+      "url": "https://www.figma.com/api/mcp/asset/2789782d-9f61-4865-9566-ac1fae4382cf.svg"
+    },
+    {
+      "name": "imgGroup",
+      "file": "imgGroup.svg",
+      "url": "https://www.figma.com/api/mcp/asset/d4bd620c-d71a-4d2b-9e79-cc4ade4f3ec6.svg"
+    },
+    {
+      "name": "imgGroup1",
+      "file": "imgGroup1.svg",
+      "url": "https://www.figma.com/api/mcp/asset/d68b32fe-2213-47aa-aa21-62f587dc07a7.svg"
+    },
+    {
+      "name": "img",
+      "file": "img.png",
+      "url": "https://www.figma.com/api/mcp/asset/1835c16d-8580-481f-b6d9-115b0a8026b0.png"
+    }
+  ]
+}
