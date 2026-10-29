@@ -5,7 +5,7 @@
   const pager=()=>`<div class="h366-pagination" role="group" aria-label="首屏轮播分页">${[0,1].map(i=>`<button ${A.attr('kv366-select',{index:i})} aria-label="切换至第 ${i+1} 帧" aria-pressed="${i===0}"><i></i></button>`).join('')}</div>`;
   first=first.replace(/<button class="h344-progress"[\s\S]*?<\/button>/,pager());
   const second=first.replace('data-node-id="344:8055"','data-node-id="366:12016"')
-   .replace(/<img class="h344-kv-image"[^>]*>/,`<div class="h366-background" aria-hidden="true"><img src="assets/kv366/imgSection.png" alt=""><img src="assets/kv366/imgSection1.png" alt=""></div>`)
+   .replace(/<img class="h344-kv-image"[^>]*>/,`<div class="h366-background" aria-hidden="true"><img src="assets/kv366/imgSection.png.webp" alt=""><img src="assets/kv366/imgSection1.png.webp" alt=""></div>`)
    .replace(/<video[\s\S]*?<\/video>/,'')
    .replace('<h1><span>Bliss</span>Blend<span>™</span></h1>','<h1>BlissBlend™</h1>')
    .replace(/data-ux="h344-play"/g,'data-ux="kv366-auto"')

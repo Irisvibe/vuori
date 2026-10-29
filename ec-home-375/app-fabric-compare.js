@@ -8,7 +8,7 @@ const facts={
  form:{feel:'如黄油般柔软，具有支撑与包裹感',scene:'中等强度锻炼、普拉提、塑形、芭蕾、HIIT',features:'四向弹力、吸湿排汗',recycled:'参考页未标注',filter:'BlissBlend Form'},
  interlock:{feel:'如桃般柔软、光滑，舒适紧致',scene:'高强度运动、需要透气压缩与支撑的运动',features:'四向弹力、吸湿排汗、速干',recycled:'参考页未标注',filter:'BreatheInterlock'}
 };
-const material=id=>A.fabrics.find(f=>f.id===id),texture=id=>'assets/fabric-'+({dream:'dreamknit',bliss:'blissblend',form:'blissblend-form',interlock:'breatheinterlock'})[id]+'.png';
+const material=id=>A.fabrics.find(f=>f.id===id),texture=id=>'assets/fabric-'+({dream:'dreamknit',bliss:'blissblend',form:'blissblend-form',interlock:'breatheinterlock'})[id]+'.png.webp';
 A.fabricCompareControl=id=>{const selected=S.fabricCompare.includes(id);return `<button class="fabric-compare-pick ${selected?'selected':''}" ${A.attr('fabric-compare-toggle',{id})} aria-pressed="${selected}" aria-label="${selected?'移除':'加入对比'} ${material(id).name}">${A.icon(selected?'check':'plus')}<span>${selected?'已加入对比':'加入对比'}</span></button>`};
 A.fabricCompareBar=()=>`<span class="fabric-compare-count" role="status" aria-live="polite">${S.fabricCompare.length?'已选 '+S.fabricCompare.length+' / 2':'选择两种面料'}</span><div>${S.fabricCompare.length?`<button class="ux-link" ${A.attr('fabric-compare-clear')}>清空</button>`:''}<button class="ux-btn inline" ${A.attr('fabric-compare-open')} ${S.fabricCompare.length!==2?'disabled':''}>开始对比</button></div>`;
 A.syncFabricCompare=()=>{document.querySelectorAll('[data-compare-control]').forEach(el=>el.innerHTML=A.fabricCompareControl(el.dataset.compareControl));const bar=document.querySelector('.fabric-compare-bar');if(bar)bar.innerHTML=A.fabricCompareBar();};
