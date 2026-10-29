@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>VUORI · 电商小程序首页</title>
+<script>if(new URLSearchParams(location.search).has('v')){const url=new URL(location.href);url.searchParams.delete('v');history.replaceState(history.state,'',url.pathname+url.search+url.hash)}</script>
 <style>
 body:not(.app-ready)>.page{visibility:hidden}
 
