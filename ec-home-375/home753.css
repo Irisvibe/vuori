@@ -37,9 +37,8 @@
 .h753-fabric-features>span{display:flex;align-items:center;gap:8px;font-size:10px;line-height:14px;font-weight:400;white-space:nowrap}
 .h753-fabric-features img{position:static;inset:auto;flex-shrink:0;width:14px;height:14px;object-fit:contain}
 .home753 .h344-fabric .h344-more{margin-top:32px}
-.h753-sticky{position:absolute;left:0;right:0;top:0;height:124px;z-index:6;background:#fff;color:#333;visibility:hidden;pointer-events:none}
+.h753-sticky{position:absolute;left:0;right:0;top:0;z-index:6;background:#fff;color:#333;visibility:hidden;pointer-events:none}
 .has-home753-sticky .h753-sticky{visibility:visible;pointer-events:auto}
-.has-home753-sticky .h344-home .h344-genders{visibility:hidden;pointer-events:none}
 .h753-system{height:44px;display:flex;justify-content:space-between;align-items:flex-start;padding:14px 23px 0;font-size:12px;line-height:18px;font-weight:500}
 .h753-system>span:last-child{display:flex;align-items:center;gap:6px;height:15px}.h753-system img{width:auto;height:auto;max-height:12px}
 .h753-nav-header{height:44px;position:relative;display:flex;align-items:center;justify-content:space-between;padding:0 20px}
@@ -48,9 +47,6 @@
 .h753-logo-wrap{width:100px;padding-left:10px;flex-shrink:0}.h753-logo{display:block;width:90px;height:20px;object-fit:contain;object-position:bottom}
 .h753-capsule{display:flex;align-items:center;justify-content:space-evenly;width:82px;height:30px;background:#fff;border:.75px solid #3333331a;border-radius:20px}
 .h753-capsule>img{width:auto;height:auto;max-width:22px;max-height:20px}.h753-capsule i{height:17px;width:1px;background:#5a5a5a1a}
-.h753-genders{height:36px;display:flex;gap:60px;align-items:stretch;justify-content:center}
-.h753-genders button{width:48px;height:36px;display:flex;justify-content:center;align-items:center;font-size:16px;line-height:22px;font-weight:400;color:#868686;border-bottom:1px solid transparent}
-.h753-genders button.selected{color:#333;font-weight:400;border-color:#333}
 .home753 .h344-home button:focus-visible{outline:1px solid currentColor;outline-offset:2px}
 .export-mode .h753-sticky{display:none}
 @media(max-width:350px){.h753-fabric-features{gap:10px}.h753-fabric-features>span{gap:4px}.h753-restore-copy>p{font-size:20px}.h753-nav-header{padding-inline:16px}}
