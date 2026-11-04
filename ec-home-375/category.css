@@ -19,3 +19,68 @@
 .catalog-header-capsule{height:30px;width:82px;border:.75px solid #3333331a;border-radius:20px;display:flex;align-items:center;justify-content:space-evenly;background:#fff}.catalog-header-capsule img{display:block;max-width:none}.catalog-header-capsule i{width:1px;height:17px;background:#5a5a5a;opacity:.1}
 /* Text-only category shortcuts, per latest user request. */
 .catalog-shortcuts{padding:4px 0 12px;gap:8px}.catalog-shortcuts>button{min-height:40px;display:flex;align-items:center;justify-content:flex-start;padding:8px 0;font-size:12px;line-height:16px;transition:opacity 160ms,transform 160ms}.catalog-shortcuts>button:active{transform:translateY(1px);opacity:.6}.catalog-shortcuts>button:focus-visible,.catalog-header-search:focus-visible{outline:1px solid #333;outline-offset:2px}
+
+/* Scene styling is a category-pane adaptation, not new Figma measurements. */
+.catalog-scene-entry{border-bottom:1px solid var(--vui-primitive-color-cloud,#ededed);color:#333;font-weight:500}
+.catalog-scene-view .h344-section{padding:0}
+.catalog-scene-view .h344-heading{height:auto;min-height:28px;margin-bottom:16px;gap:8px}
+.catalog-scene-view .h344-heading h2{font-size:16px;line-height:22px;font-weight:500;margin:0}
+.catalog-scene-view .h344-genders{gap:16px;flex:none}
+.catalog-scene-view .h344-genders button{font-size:12px;line-height:16px;min-height:36px;height:auto;padding:8px 0}
+.catalog-scene-view .h344-bleed{width:100%;margin:0}
+.catalog-scene-view .h753-scene-stage{height:auto;aspect-ratio:3/4;background:#ededed}
+.catalog-scene-view .h753-scene-stage>img{position:absolute;inset:0;object-position:center}
+.catalog-scene-view .h753-scene-shade{background:linear-gradient(90deg,#0009,transparent)}
+.catalog-scene-view .h753-scene-controls{left:16px;right:12px}
+.catalog-scene-view .h753-scene-modes button{font-size:32px;line-height:44px;letter-spacing:-.5px;color:#fff;opacity:.75}
+.catalog-scene-view .h753-scene-modes button.active{opacity:1;text-decoration:underline;text-underline-offset:6px;text-decoration-thickness:1px}
+.catalog-scene-view .h753-scene-lines button{height:44px}
+.catalog-scene-view .h753-scene-products{height:auto;margin-top:16px;align-items:flex-start;gap:8px;padding-bottom:4px}
+.catalog-scene-view .h344-product{width:124px;min-width:0}
+.catalog-scene-view .h344-product .h344-product-media,.catalog-scene-view .h344-product .h344-product-media img{width:124px;height:155px;top:0;object-fit:cover}
+.catalog-scene-view .h344-swatches{gap:6px;margin-top:8px;flex-wrap:wrap;height:auto;min-height:20px}
+.catalog-scene-view .h344-product-name{width:100%;font-size:12px;line-height:18px;margin-top:8px;text-align:left}
+.catalog-scene-view .h344-price{font-size:12px;line-height:16px;margin:4px 0 0;font-weight:400}
+.catalog-scene-view .h344-more{margin-top:20px;height:44px;min-height:44px;font-size:12px}
+.catalog-scene-view .h344-rail:focus-visible{outline:1px solid #333;outline-offset:-1px}
+@media(max-width:350px){.catalog-scene-view .h344-heading{flex-wrap:wrap;gap:4px}.catalog-scene-view .h344-rail{margin-inline:-12px;padding-inline:12px;scroll-padding-left:12px}.catalog-scene-view .h753-scene-controls{left:12px;right:8px}.catalog-scene-view .h753-scene-modes button{font-size:32px;line-height:42px}.catalog-scene-view .h753-scene-lines button{height:42px;width:24px}}
+
+/* Color taxonomy shares the home palette, adapted to the category content column. */
+.catalog-color-genders{display:flex;gap:20px;margin:0 0 20px;border-bottom:1px solid #ededed}
+.catalog-color-genders button{min-height:44px;font-size:12px;padding:8px 0;border-bottom:1px solid transparent;color:#5a5a5a}
+.catalog-color-genders button[aria-pressed=true]{color:#333;border-bottom-color:#333}
+.color-palette--catalog{gap:24px}
+.color-palette--catalog .color-palette-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.color-palette--catalog .color-palette-card{min-height:104px}
+
+/* Figma 1736:1105, women category. */
+.catalog-women .catalog-pane-heading{margin-bottom:16px}
+.catalog-women .catalog-product-types{padding-top:0}
+.catalog-women-more{display:grid;place-items:center;width:100%;min-height:44px;margin-top:32px;border:1px solid var(--vui-semantic-color-border,#c6c6c6);font-size:12px!important}
+.catalog-women [data-catalog-fold="women:clothing"]{border-bottom:0}
+
+/* Figma 1873:4276, color category. */
+.catalog-color-category .catalog-pane-heading{margin-bottom:22px}
+.catalog-color-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 8px}
+.catalog-color-category .catalog-color-tile{display:flex;flex-direction:column;gap:8px;min-width:0;text-align:left;font-size:12px;line-height:16px}
+.catalog-color-photo{display:block;position:relative;width:100%;aspect-ratio:129.5/162;overflow:hidden;background:#f8f8f8}
+.catalog-color-photo img{display:block;width:100%;height:100%;object-fit:cover}
+.catalog-color-photo i{position:absolute;inset:auto 0 0;height:16px;background:var(--catalog-color-tone)}
+.catalog-color-more{display:grid;place-items:center;width:100%;min-height:44px;margin-top:32px;border:1px solid var(--vui-semantic-color-border,#c6c6c6);font-size:12px!important}
+
+/* Figma 1873:4901, scene category. */
+.catalog-scene-gallery .catalog-pane-heading{min-height:28px;margin-bottom:16px}
+.catalog-scene-gallery .catalog-product-types{padding-top:0}
+.catalog-scene-genders{display:flex;align-items:center;gap:25px}
+.catalog-scene-gallery .catalog-scene-genders>button{min-height:28px;padding:4px 0;border-bottom:1px solid transparent;color:#868686;font-size:12px;line-height:16px;font-weight:500}
+.catalog-scene-gallery .catalog-scene-genders>button[aria-pressed=true]{border-color:#333;color:#333}
+@media(max-width:350px){.catalog-scene-genders{gap:12px}}
+
+/* Figma 1905:6163, men category. */
+.catalog-garment-hero>img{height:calc(100% + 15px);object-position:center}
+.catalog-garment-quick{position:absolute;z-index:1;inset:auto 0 4px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+.catalog-garment-quick .catalog-link{justify-content:center;position:relative;min-height:36px;color:#f8f8f8;text-align:center;white-space:nowrap}
+.catalog-garment-quick .catalog-link>svg{display:none}
+.catalog-garment-quick .catalog-link:first-child::after{content:'';position:absolute;left:50%;bottom:5px;transform:translateX(-50%);width:32px;height:1px;background:#f8f8f8}
+.catalog-men .catalog-product-types{padding-top:0}
+.catalog-men [data-catalog-fold="men:clothing"]{border-bottom:0}

@@ -162,4 +162,7 @@
   --vui-component-member-service-gap:8px;
   --vui-component-member-order-icon-size:22px;
   --vui-component-member-profile-avatar-size:48px;
+  --vui-component-color-palette-swatch-size:44px;
+  --vui-component-color-palette-card-min-height:84px;
+  --vui-component-color-palette-group-gap:16px;
 }
