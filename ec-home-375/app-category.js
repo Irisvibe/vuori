@@ -28,16 +28,16 @@ function garmentHero(gender,photo,alt){
 function menPane(){
  const gender='男士';
  const types=[
-  ['连帽衫与卫衣','上装','strato-tee.png.webp?v=20261104-pages'],
-  ['运动裤','长裤','category-men1905/joggers.png.webp?v=20261104-pages'],
-  ['夹克与背心','上装','category-men1905/jackets.png.webp?v=20261104-pages'],
-  ['长袖上衣','上装','category-men1905/long-sleeve.png.webp?v=20261104-pages']
+  ['连帽衫与卫衣','上装','strato-tee.png.webp?v=20261029-images-all'],
+  ['运动裤','长裤','category-men1905/joggers.png.webp?v=20261029-images-all'],
+  ['夹克与背心','上装','category-men1905/jackets.png.webp?v=20261029-images-all'],
+  ['长袖上衣','上装','category-men1905/long-sleeve.png.webp?v=20261029-images-all']
  ];
  const clothingGrid=`<div class="catalog-product-types">${types.map(([label,category,photo])=>`<button ${attrs('open',{title:gender+' · '+category,params:JSON.stringify({gender,category})})}>${image(asset(photo),'')}<span>${label}</span></button>`).join('')}</div>`;
  const fabrics=[...new Set(items(gender).map(p=>p.fabric))].filter(f=>!['日常','训练'].includes(f));
  return `<div class="catalog-men" data-node-id="1905:6163">
   <div class="catalog-pane-heading"><h1>男士</h1></div>
-  ${garmentHero(gender,'category-men1905/hero.png.webp?v=20261104-pages','Thibault Magnin 滑雪穿搭')}
+  ${garmentHero(gender,'category-men1905/hero.png.webp?v=20261029-images-all','Thibault Magnin 滑雪穿搭')}
   ${fold('featured','精选推荐',go('自在日常',{gender,scene:'日常'})+go('Restore 舒适系列',{gender,catalog:'restore'})+go('蓝色新作',{gender,color:'海岸蓝'})+go('秋日叠穿',{gender,category:'上装'}))}
   ${fold('clothing','服装分类',clothingGrid+`<button class="catalog-women-more" ${attrs('open',{title:'男士 · 全部单品',params:JSON.stringify({gender})})}>探索更多</button>`,true)}
   ${fold('accessories','配饰',accessoryLinks())}
@@ -48,16 +48,16 @@ function womenPane(){
  const gender='女士';
  const restore={gender,catalog:'restore'};
  const types=[
-  ['连帽衫与卫衣','上装','color-story/violet-0.png.webp?v=20261104-pages'],
-  ['运动裤','长裤','halo-studio.png.webp?v=20261104-pages'],
-  ['夹克与背心','上装','category-men1905/jackets.png.webp?v=20261104-pages'],
-  ['长袖上衣','上装','category-men1905/jackets.png.webp?v=20261104-pages']
+  ['连帽衫与卫衣','上装','color-story/violet-0.png.webp?v=20261029-images-all'],
+  ['运动裤','长裤','halo-studio.png.webp?v=20261029-images-all'],
+  ['夹克与背心','上装','category-men1905/jackets.png.webp?v=20261029-images-all'],
+  ['长袖上衣','上装','category-men1905/jackets.png.webp?v=20261029-images-all']
  ];
  const clothingGrid=`<div class="catalog-product-types">${types.map(([label,category,photo])=>`<button ${attrs('open',{title:gender+' · '+category,params:JSON.stringify({gender,category})})}>${image(asset(photo),'')}<span>${label}</span></button>`).join('')}</div>`;
  const fabrics=[...new Set(items(gender).map(p=>p.fabric))].filter(f=>!['日常','训练'].includes(f));
  return `<div class="catalog-women" data-node-id="1736:1105">
   <div class="catalog-pane-heading"><h1>女士</h1></div>
-  ${garmentHero(gender,'category-women1736/hero.png.webp?v=20261104-pages','女士秋日穿搭')}
+  ${garmentHero(gender,'category-women1736/hero.png.webp?v=20261029-images-all','女士秋日穿搭')}
   ${fold('featured','精选推荐',go('自在日常',{gender,scene:'日常'})+go('Restore 舒适系列',restore)+go('蓝色新作',{gender,color:'海岸蓝'})+go('秋日叠穿',{gender,category:'上装'}))}
   ${fold('clothing','服装分类',clothingGrid+`<button class="catalog-women-more" ${attrs('open',{title:'女士 · 全部单品',params:JSON.stringify({gender})})}>探索更多</button>`,true)}
   ${fold('accessories','配饰',accessoryLinks())}
@@ -79,7 +79,7 @@ function scenes(){
   </div>
   <div class="catalog-product-types">${sceneCategories.map(([photo,label,fallback])=>{
    const scene=items(gender).some(p=>p.scene===label)?label:fallback||label;
-   return `<button ${attrs('open',{title:gender+' · '+scene,params:JSON.stringify({gender,scene})})}>${image(asset('category-scene1873/'+photo+'.png.webp?v=20261104-pages'),'')}<span>${e(label)}</span></button>`;
+   return `<button ${attrs('open',{title:gender+' · '+scene,params:JSON.stringify({gender,scene})})}>${image(asset('category-scene1873/'+photo+'.png.webp?v=20261029-images-all'),'')}<span>${e(label)}</span></button>`;
   }).join('')}</div>
   <button class="catalog-women-more" ${attrs('open',{title:gender+' · 全部单品',params:JSON.stringify({gender})})}>探索更多</button>
  </div>`;
@@ -105,7 +105,7 @@ function colorCategory(){
  return `<div class="catalog-color-category" data-node-id="1873:4276">
   <div class="catalog-pane-heading"><h1>按颜色选购</h1></div>
   <div class="catalog-color-grid">${colorCategories.map(({id,label,tone,image:photo})=>`<button class="catalog-color-tile" ${attrs('color',{id})}>
-   <span class="catalog-color-photo">${image(asset('category1873/'+photo+'.png.webp?v=20261104-pages'),'')}<i style="--catalog-color-tone:${tone}" aria-hidden="true"></i></span>
+   <span class="catalog-color-photo">${image(asset('category1873/'+photo+'.png.webp?v=20261029-images-all'),'')}<i style="--catalog-color-tone:${tone}" aria-hidden="true"></i></span>
    <span>${label}</span>
   </button>`).join('')}</div>
   <button class="catalog-color-more" ${attrs('open',{title:'全部单品'})}>探索更多</button>
@@ -124,12 +124,13 @@ A.actions['catalog-color']=({id})=>{
  A.go('U03',{color:[...names].join(',')||group.label,title:group.label+' · 色彩选购'});
 };
 
-function genderTile(g,label,params={}){return `<button class="catalog-editorial-card" ${attrs('open',{title:label,params:JSON.stringify({gender:g,...params})})}>${image(asset(g==='女士'?'women.jpg.webp?v=20261104-pages':'men.jpg.webp?v=20261104-pages'),label)}<span>${e(label)}${A.icon('arrow')}</span></button>`}
+function genderTile(g,label,params={}){return `<button class="catalog-editorial-card" ${attrs('open',{title:label,params:JSON.stringify({gender:g,...params})})}>${image(asset(g==='女士'?'women.jpg.webp?v=20261029-images-all':'men.jpg.webp?v=20261029-images-all'),label)}<span>${e(label)}${A.icon('arrow')}</span></button>`}
 function newness(){return `<div class="catalog-pane-heading"><h1>新品</h1></div><div class="catalog-editorial-list">${genderTile('女士','女士新品',{catalog:'new-women',sort:'上新优先'})}${genderTile('男士','男士新品',{catalog:'new-men',sort:'上新优先'})}</div><section class="catalog-simple-section"><h2>从这里发现</h2><button class="catalog-link" ${attrs('root',{value:'accessories'})}><span>配饰新品</span>${A.icon('chevron')}</button>${route('初识 Vuori','U07',{type:'story',title:'我们的故事'})}</section>`}
 function accessoryLinks(includeAll=true){return accessoryTypes.filter(([key])=>includeAll||key!=='all').map(([key,label])=>go(label,{catalog:'accessories',accessory:key})).join('')}
-function accessories(){const rail=`<div class="catalog-accessory-rail" tabindex="0" role="region" aria-label="配饰精选，可左右滑动">${[['bags','包袋与背包','bags'],['equipment','运动配件','fitness'],['hats','帽子','hats']].map(([key,title,img])=>`<button class="catalog-accessory-card" ${attrs('open',{title,params:JSON.stringify({catalog:'accessories',accessory:key})})}>${image(asset('category-accessories/'+img+'.webp.webp?v=20261104-pages'),title)}<span>${e(title)}${A.icon('arrow')}</span></button>`).join('')}</div>`;return `<div class="catalog-pane-heading"><h1>配饰</h1>${go('查看全部',{catalog:'accessories',accessory:'all'},'catalog-all')}</div><button class="catalog-hero catalog-accessory-hero" ${attrs('open',{title:'包袋',params:JSON.stringify({catalog:'accessories',accessory:'bags'})})}>${image(asset('category-accessories/bags.webp.webp?v=20261104-pages'),'包袋穿搭')}<span>自在随行${A.icon('arrow')}</span></button>${fold('accessory-types','配饰分类',`<div class="catalog-accessory-menu">${accessoryLinks(false)}</div>`,true)}${fold('accessory-feature','配饰精选',rail,true)}`}
+function accessories(){const rail=`<div class="catalog-accessory-rail" tabindex="0" role="region" aria-label="配饰精选，可左右滑动">${[['bags','包袋与背包','bags'],['equipment','运动配件','fitness'],['hats','帽子','hats']].map(([key,title,img])=>`<button class="catalog-accessory-card" ${attrs('open',{title,params:JSON.stringify({catalog:'accessories',accessory:key})})}>${image(asset('category-accessories/'+img+'.webp.webp?v=20261029-images-all'),title)}<span>${e(title)}${A.icon('arrow')}</span></button>`).join('')}</div>`;return `<div class="catalog-pane-heading"><h1>配饰</h1></div><button class="catalog-hero catalog-accessory-hero" ${attrs('open',{title:'包袋',params:JSON.stringify({catalog:'accessories',accessory:'bags'})})}>${image(asset('category-accessories/bags.webp.webp?v=20261029-images-all'),'包袋穿搭')}<span>自在随行${A.icon('arrow')}</span></button>${fold('accessory-types','配饰分类',`<div class="catalog-accessory-menu">${accessoryLinks(false)}</div>`,true)}${fold('accessory-feature','配饰精选',rail,true)}
+ <button class="catalog-women-more" ${attrs('open',{title:'全部配饰',params:JSON.stringify({catalog:'accessories',accessory:'all'})})}>探索更多</button>`}
 function gifting(){return `<div class="catalog-pane-heading"><h1>礼赠</h1></div><p class="catalog-gift-copy">让舒适，成为一份心意。</p><div class="catalog-editorial-list">${genderTile('女士','送给她')}${genderTile('男士','送给他')}</div>`}
-function explore(){return `<div class="catalog-pane-heading"><h1>探索</h1></div><button class="catalog-explore-hero" ${A.attr('go',{route:'U07',params:JSON.stringify({type:'story',title:'我们的故事'})})}>${image('assets/community.png.webp?v=20261104-pages','Vuori 社区生活')}<span>运动之外<br>生活之中${A.icon('arrow')}</span></button><section class="catalog-simple-section"><h2>发现 Vuori</h2>${route('我们的故事','U07',{type:'story',title:'我们的故事'})}${route('社区生活','U22')}${route('查找门店','U37')}</section>${sceneEntry()}${fold('fabric','按面料发现',[...new Set(live().map(p=>p.fabric))].filter(f=>!['日常','训练'].includes(f)).map(f=>go(f,{fabric:f})).join(''))}`}
+function explore(){return `<div class="catalog-pane-heading"><h1>探索</h1></div><button class="catalog-explore-hero" ${A.attr('go',{route:'U07',params:JSON.stringify({type:'story',title:'我们的故事'})})}>${image('assets/community.png.webp?v=20261029-images-all','Vuori 社区生活')}<span>运动之外<br>生活之中${A.icon('arrow')}</span></button><section class="catalog-simple-section"><h2>发现 Vuori</h2>${route('我们的故事','U07',{type:'story',title:'我们的故事'})}${route('社区生活','U22')}${route('查找门店','U37')}</section>${sceneEntry()}${fold('fabric','按面料发现',[...new Set(live().map(p=>p.fabric))].filter(f=>!['日常','训练'].includes(f)).map(f=>go(f,{fabric:f})).join(''))}`}
 function pane(){if(A.q('state')==='empty')return `<div class="catalog-pane-heading"><h1>${roots.find(([id])=>id===C.active)[1]}</h1></div><div class="catalog-unavailable"><h2>这个分类还在准备中</h2><p>先看看其他系列。</p><button class="catalog-text-link" ${attrs('reset')}>查看当前分类</button></div>`;return C.active==='women'?womenPane():C.active==='colors'?colorCategory():C.active==='scenes'?scenes():C.active==='new'?newness():C.active==='accessories'?accessories():C.active==='gifting'?gifting():C.active==='explore'?explore():menPane()}
 A.views.U02=()=>`<div class="catalog-page" data-component="catalog-navigation"><div class="catalog-columns"><nav class="catalog-sidebar" aria-label="一级分类">${roots.map(([id,label])=>`<button ${attrs('root',{value:id})} aria-pressed="${id===C.active}" aria-controls="catalog-pane" class="${id===C.active?'selected':''}">${id==='scenes'&&['women','men','colors','scenes'].includes(C.active)?'场景':label}</button>`).join('')}</nav><section class="catalog-pane" id="catalog-pane" aria-label="${roots.find(([id])=>id===C.active)[1]}分类内容"><div class="catalog-pane-content">${pane()}</div></section></div></div>`;
 A.actions['catalog-root']=(d)=>{if(!roots.some(([id])=>id===d.value))return;const panel=A.$('.catalog-pane');if(panel)C.scroll[C.active]=panel.scrollTop;C.active=d.value;if(C.active==='scenes'&&!S.h344SceneGender)S.h344SceneGender=C.gender;if(['women','men'].includes(C.active)){C.gender=C.active==='women'?'女士':'男士';S.gender=C.gender}A.render(false);A.$('.catalog-sidebar .selected')?.focus({preventScroll:true})};
@@ -138,11 +139,33 @@ A.actions['catalog-open']=d=>{let params={};try{params=JSON.parse(d.params||'{}'
 A.actions['catalog-reset']=()=>{const params={...A.route.params};delete params.state;A.go('U02',params,true)};
 // Explicit prototype merchandising sets; real CMS selections remain to be connected.
 C.sets=()=>({'new-women':items('女士').filter(p=>p.id.startsWith('h344-new')).map(p=>p.id),'new-men':['strato','polo'],'popular-women':items('女士').filter(p=>p.id.startsWith('h344-pop')).map(p=>p.id),'popular-men':['strato','polo'],'restore':live().filter(p=>/restore/i.test(p.name+' '+p.cn)).map(p=>p.id)});
-const filtered=A.filteredProducts;A.filteredProducts=()=>{const ps=filtered(),key=A.q('catalog');if(!key)return ps;if(key==='accessories'){const type=A.q('accessory','all'),name=accessoryTypes.find(([k])=>k===type)?.[1];const accessories=ps.filter(p=>p.department==='配饰'||p.catalogType==='accessories'||accessoryTypes.slice(1,6).some(([k,n])=>p.accessoryType===k||p.category===n));if(type==='all')return accessories;if(type==='sale')return accessories.filter(p=>p.onSale===true&&Number.isFinite(p.compareAtPrice)&&p.compareAtPrice>p.price);return accessories.filter(p=>p.accessoryType===type||p.category===name)}const ids=C.sets()[key];return ids?ps.filter(p=>ids.includes(p.id)):[]};
-const listView=A.views.U03;A.views.U03=()=>{if(A.q('catalog')!=='accessories'||A.filteredProducts().length)return listView();return `<div class="ux-page catalog-accessory-results">${A.heading(A.q('title','配饰'))}${A.empty('这个类目还在准备中','当前暂无可展示的商品，先看看其他配饰。','catalog-back-accessories',{},'返回配饰分类','bag')}</div>`};
+const filtered=A.filteredProducts;A.filteredProducts=(params=A.route.params)=>{const ps=filtered(params),key=params.catalog;if(!key)return ps;if(key==='accessories'){const type=params.accessory??'all',name=accessoryTypes.find(([k])=>k===type)?.[1];const accessories=ps.filter(p=>p.department==='配饰'||p.catalogType==='accessories'||accessoryTypes.slice(1,6).some(([k,n])=>p.accessoryType===k||p.category===n));if(type==='all')return accessories;if(type==='sale')return accessories.filter(p=>p.onSale===true&&Number.isFinite(p.compareAtPrice)&&p.compareAtPrice>p.price);return accessories.filter(p=>p.accessoryType===type||p.category===name)}const ids=C.sets()[key];return ids?ps.filter(p=>ids.includes(p.id)):[]};
+let headbandPair;
+const listView=A.views.U03;
+const isHair=()=>A.q('catalog')==='accessories'&&A.q('accessory')==='hair';
+A.views.U03=()=>{
+ if(A.q('catalog')!=='accessories'||A.q('accessory','all')==='all')return listView();
+ const hasProducts=A.filteredProducts().length>0;
+ if(isHair()&&window.VuoriHeadbandCompare){
+  const compare=window.VuoriHeadbandCompare.render({pair:headbandPair});
+  if(hasProducts)return `<div class="catalog-hair-page">${compare}${listView()}</div>`;
+  return `<div class="ux-page catalog-hair-page">${compare}<section class="catalog-hair-availability"><h3>发饰商品</h3><p>暂无可展示商品</p></section></div>`;
+ }
+ if(hasProducts)return listView();
+ return `<div class="ux-page catalog-accessory-results">${A.heading(A.q('title','配饰'))}${A.empty('这个类目还在准备中','当前暂无可展示的商品，先看看其他配饰。','catalog-back-accessories',{},'返回配饰分类','bag')}</div>`;
+};
+document.addEventListener('headband-pair-change',event=>{if(event.target.closest('.catalog-hair-page'))headbandPair=event.detail});
 A.actions['catalog-back-accessories']=()=>{C.active='accessories';A.back()};
 document.addEventListener('keydown',event=>{const rail=event.target.closest?.('.catalog-accessory-rail,.catalog-scene-view .h344-rail');if(!rail||!['ArrowLeft','ArrowRight'].includes(event.key))return;event.preventDefault();rail.scrollBy({left:event.key==='ArrowRight'?150:-150,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'})});
-function bind(){const icon=(name,ext='svg',alt='')=>`<img src="assets/category1580/${name}.${ext}" alt="${alt}">`;A.$('.system').innerHTML=`<span class="time">9:41</span><div class="system-icons">${icon('imgIcon1')}${icon('imgIcon2')}${icon('imgIcon3')}</div>`;A.$('#app-header').innerHTML=`<button class="catalog-header-search" ${A.attr('go',{route:'U04'})} aria-label="搜索商品">${icon('imgIcon4')}</button><div class="catalog-header-logo">${icon('imgImageVuori1','png.webp?v=20261104-pages','vuori')}</div><div class="catalog-header-capsule" aria-label="微信小程序菜单">${icon('imgIcon5')}<i></i>${icon('imgIcon6')}</div>`;document.querySelectorAll('.catalog-shortcuts>button>svg').forEach(icon=>icon.remove());const nav=A.$('#app-nav');nav.innerHTML=A.brandBottomNavHTML('U02');nav.classList.remove('over-kv');A.$('#app-content').onscroll=null;const panel=A.$('.catalog-pane');if(!panel)return;panel.querySelectorAll('.catalog-scene-view .h344-rail').forEach(rail=>{rail.tabIndex=0;rail.setAttribute('role','region');rail.setAttribute('aria-label','场景搭配单品，可左右滑动')});panel.scrollTop=C.scroll[C.active]||0;panel.addEventListener('scroll',()=>C.scroll[C.active]=panel.scrollTop,{passive:true});if(!matchMedia('(prefers-reduced-motion: reduce)').matches)panel.firstElementChild.animate([{opacity:.65,transform:'translateY(6px)'},{opacity:1,transform:'translateY(0)'}],{duration:220,easing:'cubic-bezier(.16,1,.3,1)'});}
+function bind(){const icon=(name,ext='svg',alt='')=>`<img src="assets/category1580/${name}.${ext}" alt="${alt}">`;A.$('.system').innerHTML=`<span class="time">9:41</span><div class="system-icons">${icon('imgIcon1')}${icon('imgIcon2')}${icon('imgIcon3')}</div>`;A.$('#app-header').innerHTML=`<button class="catalog-header-search" ${A.attr('go',{route:'U04'})} aria-label="搜索商品">${icon('imgIcon4')}</button><div class="catalog-header-logo">${icon('imgImageVuori1','png.webp','vuori')}</div><div class="catalog-header-capsule" aria-label="微信小程序菜单">${icon('imgIcon5')}<i></i>${icon('imgIcon6')}</div>`;document.querySelectorAll('.catalog-shortcuts>button>svg').forEach(icon=>icon.remove());const nav=A.$('#app-nav');nav.innerHTML=A.brandBottomNavHTML('U02');nav.classList.remove('over-kv');A.$('#app-content').onscroll=null;const panel=A.$('.catalog-pane');if(!panel)return;panel.querySelectorAll('.catalog-scene-view .h344-rail').forEach(rail=>{rail.tabIndex=0;rail.setAttribute('role','region');rail.setAttribute('aria-label','场景搭配单品，可左右滑动')});panel.scrollTop=C.scroll[C.active]||0;panel.addEventListener('scroll',()=>C.scroll[C.active]=panel.scrollTop,{passive:true});if(!matchMedia('(prefers-reduced-motion: reduce)').matches)panel.firstElementChild.animate([{opacity:.65,transform:'translateY(6px)'},{opacity:1,transform:'translateY(0)'}],{duration:220,easing:'cubic-bezier(.16,1,.3,1)'});}
 document.addEventListener('toggle',event=>{if(event.target.matches?.('[data-catalog-fold]'))C.folds[event.target.dataset.catalogFold]=event.target.open},true);
-const render=A.render;A.render=function(...args){document.body.classList.toggle('catalog-mode',A.parse().id==='U02');render(...args);if(A.route.id==='U02')bind()};
+const render=A.render;A.render=function(...args){
+ document.body.classList.toggle('catalog-mode',A.parse().id==='U02');
+ render(...args);
+ if(A.route.id==='U02')bind();
+ if(A.route.id==='U03'&&A.$('.catalog-hair-page')){
+  A.$('#app-header .ux-headtitle').textContent='发饰';
+  if(!history.state?.depth)C.active='accessories';
+ }
+};
 })();

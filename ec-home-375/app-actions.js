@@ -8,13 +8,115 @@ H['detail-size']=d=>{S.detailSize=d.value;A.render(false)};
 H['list-gender']=d=>A.go('U03',{gender:d.value,title:d.value+'系列'});H['category-gender']=d=>{S.gender=d.value;S.category='全部';A.render(false)};H['category-select']=d=>{S.category=d.value;A.render(false)};
 H['category-list']=d=>{const p={gender:S.gender,title:S.gender+' · '+d.value};if(S.category==='面料')p.fabric=d.value;else if(['上装','长裤','运动内衣'].includes(S.category))p.category=S.category;else if(d.value==='运动上装')p.category='上装';else if(d.value==='自在长裤')p.category='长裤';else if(d.value==='训练系列')p.scene='训练';A.go('U03',p)};
 H['home-collection']=d=>A.go('U03',['女士','男士'].includes(d.value)?{gender:d.value,title:d.value+'系列'}:{title:d.value});H['scene-list']=d=>A.go('U03',{scene:d.value,title:d.value+'场景'});H['home-outfit']=d=>{S.homeScene=d.value;A.render(false)};H['home-color']=d=>{S.homeColor=Number(d.index);A.render(false)};H['home-color-list']=d=>A.go('U03',{color:d.color,title:d.color+'色系'});H.story=()=>A.go('U07',{type:'brand'});H['fabric-scroll']=d=>{const rail=document.querySelector('.fabric-texture-rail');rail?.scrollBy({left:Number(d.direction)*165.172,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})};H['fabric-select']=d=>{const index=Number(d.index);if(!A.fabrics[index]||index===(S.homeFabric||0))return;S.homeFabric=index;S.fabricChanged=true;A.render(false);};
-H.keyword=d=>A.search(d.value);A.search=value=>{const q=String(value||'').trim();if(!q)return;S.history=[q,...S.history.filter(x=>x!==q)].slice(0,8);S.pageSize=4;A.track('search_submit',{keyword:q});A.go('U03',{q})};H['clear-search']=()=>{const i=$('input[name="keyword"]');if(i){i.value='';i.focus()}};H['clear-history']=()=>A.confirm('清除搜索记录','清除本机保存的全部搜索记录？','confirm-clear-history');H['confirm-clear-history']=()=>{S.history=[];A.closeSheet(true);A.save();A.render(false)};H['load-more']=()=>{S.pageSize+=4;A.render(false)};
-A.filters=()=>{const options={category:['上装','长裤','运动内衣'],color:['海岸蓝','樱桃深红','浆果红','炭灰黑','云雾白'],size:['XS','S','M','L','XL'],fabric:['DreamKnit','BlissBlend','Strato','Performance'],scene:['日常','训练','户外'],price:['under800']},names={category:'品类',color:'颜色',size:'尺码',fabric:'面料',scene:'场景',price:'价格'};A.filterDraft={};for(const k of Object.keys(options))A.filterDraft[k]=A.q(k)?A.q(k).split(','):[];A.openSheet('筛选商品',Object.entries(options).map(([k,values])=>`<section class="ux-filter-group"><p>${names[k]}</p><div class="ux-filter-options">${values.map(v=>`<button class="ux-chip ${A.filterDraft[k].includes(v)?'selected':''}" ${A.attr('filter-toggle',{key:k,value:v})} aria-pressed="${A.filterDraft[k].includes(v)}">${v==='under800'?'¥ 800 以下':v}</button>`).join('')}</div></section>`).join('')+`<div class="ux-sheet-footer">${A.button('清空','filter-reset',{},'outline')}${A.button('确认筛选','filter-apply')}</div>`)};
-H.filters=A.filters;H['filter-toggle']=(d,el)=>{const a=A.filterDraft[d.key];if(a.includes(d.value))a.splice(a.indexOf(d.value),1);else a.push(d.value);el.classList.toggle('selected',a.includes(d.value));el.setAttribute('aria-pressed',String(a.includes(d.value)))};H['filter-reset']=()=>{Object.values(A.filterDraft).forEach(x=>x.splice(0));$('#ux-sheet').querySelectorAll('.ux-chip').forEach(x=>{x.classList.remove('selected');x.setAttribute('aria-pressed','false')})};H['filter-apply']=()=>{const p={...A.route.params};for(const[k,v]of Object.entries(A.filterDraft)){if(v.length)p[k]=v.join(',');else delete p[k]}delete p.state;S.pageSize=4;A.track('filter_apply',{filters:{...A.filterDraft}});A.go('U03',p,true)};H['clear-filter']=d=>{const p={...A.route.params};delete p[d.key];delete p.state;A.go('U03',p,true)};H['clear-filters']=()=>{const p={...A.route.params};for(const k of ['category','color','size','price','scene','fabric','state'])delete p[k];A.go('U03',p,true)};H.sort=()=>A.openSheet('商品排序',`<div class="ux-stack">${['综合排序','上新优先','价格从低到高','价格从高到低'].map(v=>`<button class="ux-listrow" ${A.attr('sort-apply',{value:v})}><span>${v}</span>${A.q('sort','综合排序')===v?A.icon('check'):''}</button>`).join('')}</div>`);H['sort-apply']=d=>A.go('U03',{...A.route.params,sort:d.value},true);
-A.skuStock=(p,color,size)=>{if(!p.stock||p.retired||A.q('state')==='soldout'||A.q('state')==='retired')return 0;if(color===1&&size==='XS')return 0;return Math.min(5,p.stock)};
+H.keyword=d=>A.search(d.value);A.search=value=>{const q=String(value||'').trim();if(!q)return;S.history=[q,...S.history.filter(x=>x!==q)].slice(0,8);S.pageSize=4;A.track('search_submit',{keyword:q});A.go('U03',{q})};H['clear-search']=()=>{const i=$('input[name="keyword"]');if(i){i.value='';i.focus()}};H['clear-history']=()=>A.confirm('清除搜索记录','清除本机保存的全部搜索记录？','confirm-clear-history');H['confirm-clear-history']=()=>{S.history=[];A.closeSheet(true);A.save();A.render(false)};H['load-more']=()=>{S.pageSize=Math.max(6,S.pageSize)+4;A.render(false)};
+A.listFilterKeys=['tag','gender','category','subcategory','size','color','fabric','scene','price','stock'];
+A.listFilterLabel=(key,value)=>key==='stock'?'仅看有货':key==='price'&&value==='under800'?'¥ 800 以下':value;
+A.listMerchandisingTags=()=>{
+ const sets=A.Catalog?.sets()||{};
+ return {
+  '新品上新':new Set([...(sets['new-women']||[]),...(sets['new-men']||[])]),
+  '人气之选':new Set([...(sets['popular-women']||[]),...(sets['popular-men']||[])])
+ };
+};
+
+function filterDraftParams(){
+ const params=A.productListScope?.()??{...A.route.params};
+ for(const [key,values] of Object.entries(A.filterDraft)){
+  if(values.length)params[key]=values.join(',');
+  else delete params[key];
+ }
+ delete params.state;
+ return params;
+}
+const filterResultLabel=()=>`查看 ${A.filteredProducts(filterDraftParams()).length} 件商品`;
+function updateFilterResult(){
+ const button=$('#ux-sheet .plp-filter-apply');
+ if(button)button.textContent=filterResultLabel();
+}
+
+A.filters=()=>{
+ const products=D.products.filter(p=>!p.retired);
+ const values=key=>[...new Set(products.map(p=>p[key]).filter(Boolean))];
+ const tones=new Map();
+ for(const p of products)for(const [name,tone] of p.colors)if(!tones.has(name))tones.set(name,tone);
+ const options=[
+  ['category','类目',values('category')],
+  ['size','尺码',[...new Set(products.flatMap(p=>p.sizes))]],
+  ['color','颜色',[...tones.keys()]],
+  ['scene','场景',values('scene')],
+  ['fabric','材质',values('fabric')],
+  ['tag','标签',Object.entries(A.listMerchandisingTags()).filter(([,ids])=>ids.size).map(([label])=>label)],
+  ['gender','性别',['女士','男士'].filter(value=>values('gender').includes(value))],
+  ['subcategory','品类',values('subcategory')],
+  ['price','价格',['under800']]
+ ];
+ A.filterDraft=Object.fromEntries(A.listFilterKeys.map(key=>[key,A.q(key).split(',').filter(Boolean)]));
+ const groups=options.map(([key,label,available])=>{
+  const selected=A.filterDraft[key];
+  const choices=[...new Set([...available,...selected])];
+  return `<details class="plp-filter-group">
+   <summary><span>${label}</span><span class="plp-filter-indicator" aria-hidden="true"></span></summary>
+   <div class="plp-filter-options ${key==='color'?'plp-filter-colors':''}">
+    ${choices.length?choices.map(value=>`<button class="${key==='color'?'plp-filter-color':'plp-filter-chip'}" ${A.attr('filter-toggle',{key,value})} aria-pressed="${selected.includes(value)}">
+     ${key==='color'?`<i style="--filter-tone:${e(tones.get(value)||'transparent')}" aria-hidden="true"></i>`:''}<span>${e(A.listFilterLabel(key,value))}</span>
+    </button>`).join(''):`<p class="plp-filter-empty">暂无${label}选项</p>`}
+   </div>
+  </details>`;
+ }).join('');
+ A.openSheet('筛选',`<div class="plp-filter">
+  <div class="plp-filter-scroll">
+   ${groups}
+   <button class="plp-stock-switch" role="switch" aria-checked="${A.filterDraft.stock.includes('1')}" ${A.attr('filter-toggle',{key:'stock',value:'1'})}><span>仅看有货</span><i aria-hidden="true"></i></button>
+  </div>
+  <div class="plp-filter-footer">
+   <button class="plp-filter-reset" ${A.attr('filter-reset')}>全部清空</button>
+   <button class="plp-filter-apply" aria-live="polite" ${A.attr('filter-apply')}>${filterResultLabel()}</button>
+  </div>
+ </div>`);
+};
+H.filters=A.filters;
+H['filter-toggle']=(data,element)=>{
+ const selection=A.filterDraft[data.key];
+ if(!selection)return;
+ const active=selection.includes(data.value);
+ if(active)selection.splice(selection.indexOf(data.value),1);
+ else if(data.key==='gender')selection.splice(0,selection.length,data.value);
+ else selection.push(data.value);
+ if(data.key==='gender'){
+  element.closest('.plp-filter-options').querySelectorAll('button').forEach(button=>{
+   button.setAttribute('aria-pressed',String(selection.includes(button.dataset.value)));
+  });
+ }else element.setAttribute(data.key==='stock'?'aria-checked':'aria-pressed',String(!active));
+ updateFilterResult();
+};
+H['filter-reset']=()=>{
+ Object.values(A.filterDraft).forEach(values=>values.splice(0));
+ $('#ux-sheet').querySelectorAll('.plp-filter [aria-pressed]').forEach(button=>button.setAttribute('aria-pressed','false'));
+ $('#ux-sheet').querySelector('.plp-stock-switch')?.setAttribute('aria-checked','false');
+ updateFilterResult();
+};
+H['filter-apply']=()=>{
+ const params=filterDraftParams();
+ S.pageSize=4;
+ A.track('filter_apply',{filters:{...A.filterDraft}});
+ A.go('U03',params,true);
+};
+H['clear-filter']=data=>{
+ const params=A.productListScope?.()??{...A.route.params};
+ delete params[data.key];
+ delete params.state;
+ A.go('U03',params,true);
+};
+H['clear-filters']=()=>{
+ const params=A.productListScope?.()??{...A.route.params};
+ for(const key of [...A.listFilterKeys,'state'])delete params[key];
+ A.go('U03',params,true);
+};
+H.sort=()=>A.openSheet('商品排序',`<div class="ux-stack">${['综合排序','上新优先','价格从低到高','价格从高到低'].map(v=>`<button class="ux-listrow" ${A.attr('sort-apply',{value:v})}><span>${v}</span>${A.q('sort','综合排序')===v?A.icon('check'):''}</button>`).join('')}</div>`);H['sort-apply']=d=>A.go('U03',{...A.route.params,sort:d.value},true);
+A.skuStock=(p,color,size,state=A.q('state'))=>{if(!p.stock||p.retired||state==='soldout'||state==='retired')return 0;if(color===1&&size==='XS')return 0;return Math.min(5,p.stock)};
 A.skuHTML=()=>{const o=A.sku,p=A.product(o.pid),unknown=p.price==null||A.q('state')==='price-error',stock=A.skuStock(p,o.color,o.size);return window.VuoriQuickBuy.render({title:/[A-Za-z]/.test(p.cn)?p.cn:(p.name.split(' ')[0]+' '+p.cn),price:unknown?'价格暂不可用':A.money(p.price),image:'assets/'+p.image,colors:p.colors,color:o.color,sizes:p.sizes,size:o.size,qty:o.qty,maxQty:Math.min(5,p.stock||1),disabledSizes:p.sizes.filter(s=>!A.skuStock(p,o.color,s)),error:unknown?'无法获取价格，暂不可购买':o.error||'',unavailable:unknown||!stock,confirmLabel:o.index!=null?'确认修改':o.mode==='buy'?'立即购买':'加入购物袋',attrs:(action,data)=>A.attr(({close:'close-sheet',color:'sku-color',guide:'size-guide',size:'sku-size',qty:'sku-qty',confirm:'sku-confirm'})[action],data||{})})};
 A.openSKU=focus=>{A.openSheet('选择商品规格',A.skuHTML());if(focus){const buttons=[...document.querySelectorAll('#ux-sheet [data-ux]')],b=buttons.find(b=>b.dataset.ux===focus.action&&(!focus.key||b.dataset[focus.key]===String(focus.value)));(b&&!b.disabled?b:b?.parentElement.querySelector('button:not(:disabled)'))?.focus({preventScroll:true})}};
-H.sku=d=>{const p=A.product(d.pid),editing=d.index!==undefined&&d.index!==''?S.bag[Number(d.index)]:null;A.sku={pid:p.id,color:editing?.color??(A.detailProduct===p.id?S.detailColor:S.cardColors[p.id]??0),size:editing?.size??(A.detailProduct===p.id?S.detailSize:''),qty:editing?.qty??1,index:editing?Number(d.index):null,mode:d.mode||'add',error:''};A.openSKU()};
+H.sku=d=>{const p=A.product(d.pid),editing=d.index!==undefined&&d.index!==''?S.bag[Number(d.index)]:null;A.sku={pid:p.id,color:editing?.color??(d.color!==undefined?Number(d.color):A.detailProduct===p.id?S.detailColor:S.cardColors[p.id]??0),size:editing?.size??(A.detailProduct===p.id?S.detailSize:''),qty:editing?.qty??1,index:editing?Number(d.index):null,mode:d.mode||'add',error:''};A.openSKU()};
 H['sku-color']=d=>{A.sku.color=Number(d.color);if(!A.skuStock(A.product(A.sku.pid),A.sku.color,A.sku.size))A.sku.size='';A.openSKU({action:'sku-color',key:'color',value:d.color})};H['sku-size']=d=>{A.sku.size=d.value;A.sku.error='';A.openSKU({action:'sku-size',key:'value',value:d.value})};H['sku-qty']=d=>{A.sku.qty=Math.min(5,Math.max(1,A.sku.qty+Number(d.delta)));A.openSKU({action:'sku-qty',key:'delta',value:d.delta})};
 H['sku-confirm']=()=>{const o=A.sku,p=A.product(o.pid);if(!o.size||!A.skuStock(p,o.color,o.size)||p.price==null)return;if(A.q('state')==='add-error'&&!o.retried){o.retried=true;o.error='加购未完成，请保留当前规格后重试。';A.openSKU();return;}const line={pid:p.id,color:o.color,size:o.size,qty:o.qty,price:p.price,selected:true};if(o.mode==='buy'){S.checkoutItems=[line];S.checkoutSource='buy';S.coupon=null;A.closeSheet(true);A.requireMember('U10');return;}const others=S.bag.filter((_,i)=>i!==o.index),same=others.find(i=>itemKey(i)===itemKey(line));if((same?.qty||0)+line.qty>A.skuStock(p,o.color,o.size)){o.error='当前演示规格最多可选 5 件，请调整数量。';A.openSKU();return;}if(same)same.qty+=line.qty;else others.push(line);S.bag=others;A.track('add_to_bag_success',{pid:p.id,size:o.size,color:o.color});A.save();A.closeSheet(true);A.render(false);A.toast(o.index!=null?'商品规格已更新':'已加入购物袋');};
 H['size-guide']=()=>A.openSheet('尺码指南',`<p>选择适合你的穿着状态</p><p class="ux-note ux-spaced">以下为尺寸表版式示意，不是正式商品测量数据。正式尺寸按款式与品类提供。</p><table class="ux-table ux-gap"><tr><th>尺码</th><th>胸围 / 腰围</th><th>测量口径</th></tr>${['XS','S','M','L','XL'].map(s=>`<tr><td>${s}</td><td>待正式数据</td><td>平铺测量</td></tr>`).join('')}</table><p class="ux-note ux-spaced">自然站立，将软尺水平环绕测量部位，不要拉紧。个人尺码偏好不代表合身保证。</p>`,true);
@@ -22,7 +124,63 @@ H['product-info']=d=>A.openSheet(d.type==='care'?'成分与保养':'配送与退
 H['bag-qty']=d=>{const i=S.bag[Number(d.index)];if(!i)return;const qty=Math.min(A.skuStock(A.product(i.pid),i.color,i.size),Math.max(1,i.qty+Number(d.delta)));if(qty<1){A.toast('该规格暂不可用');return;}i.qty=qty;A.save();A.render(false)};H['bag-remove']=d=>A.confirm('移除商品','确认从购物袋移除这件商品？','bag-remove-confirm',{index:d.index});H['bag-remove-confirm']=d=>{S.bag.splice(Number(d.index),1);A.save();A.closeSheet(true);A.render(false);A.toast('商品已移除')};H['clear-invalid']=()=>A.confirm('清理失效商品','只移除已失效的商品，其他选择将保留。','clear-invalid-confirm');H['clear-invalid-confirm']=()=>{S.bag=S.bag.filter(i=>!i.invalid&&A.product(i.pid).stock>0);normal();A.toast('已清理失效商品')};
 H.checkout=()=>{const selected=A.selectedItems();if(!selected.length){A.toast('请先选择可结算商品');return;}S.checkoutItems=structuredClone(selected);S.checkoutSource='bag';S.coupon=null;A.requireMember('U10')};H['accept-price']=()=>{if(S.bag[0]){const p=A.product(S.bag[0].pid);p.price+=100;S.bag[0].price=p.price;}normal();A.toast('已确认新的演示价格')};H['accept-stock']=()=>{if(S.bag[0])S.bag[0].qty=1;normal();A.toast('数量已调整')};
 H.coupons=()=>{const total=A.total(S.checkoutItems);A.openSheet('选择优惠券',`<button class="ux-listrow" ${A.attr('pick-coupon',{id:'none'})}><span>不使用优惠券</span>${!S.coupon?A.icon('check'):''}</button>${D.coupons.map(c=>{const ok=c.online&&c.status==='可用'&&total>=c.threshold;return `<button class="ux-listrow" ${A.attr('pick-coupon',{id:c.id})} ${ok?'':'disabled'}><span><span>${c.name}<br><small class="ux-note">${ok?'可减 ¥'+c.amount:!c.online?'仅限门店使用':c.status==='已过期'?'已过期':'未满足使用门槛'}</small></span></span><span>${S.coupon?.id===c.id?A.icon('check'):''}</span></button>`}).join('')}<p class="ux-note ux-gap">可用券与规则均为演示，不代表现有券可在线抵扣。</p>`)};H['pick-coupon']=d=>{S.coupon=d.id==='none'?null:D.coupons.find(c=>c.id===d.id);A.closeSheet(true);A.render(false)};H['amount-info']=()=>A.openSheet('金额与配送说明',`<p>商品金额按当前演示 SKU 和数量计算，优惠券仅在满足演示门槛时适用。</p><p class="ux-note ux-spaced">运费、优惠分摊、退款返券及配送规则尚待业务确认。本原型显示 ¥0 配送费作为布局示意，不承诺正式免运费。</p>`);
-H['address-choose']=d=>{S.selectedAddress=d.id;if(A.q('choose'))A.go('U10');else{A.toast('已设为本次选用地址');A.render(false)}};H['address-delete']=d=>A.confirm('删除地址','确认删除这条收货地址？','address-delete-confirm',{id:d.id});H['address-delete-confirm']=d=>{S.addresses=S.addresses.filter(x=>x.id!==d.id);if(S.selectedAddress===d.id)S.selectedAddress=S.addresses[0]?.id||null;A.closeSheet(true);A.render(false);A.toast('地址已删除')};
+H['address-choose']=d=>{S.selectedAddress=d.id;if(A.q('choose'))A.go('U10',{},true);else{A.toast('已设为本次选用地址');A.render(false)}};H['address-delete']=d=>A.confirm('删除地址','确认删除这条收货地址？','address-delete-confirm',{id:d.id});H['address-delete-confirm']=d=>{S.addresses=S.addresses.filter(x=>x.id!==d.id);if(S.selectedAddress===d.id)S.selectedAddress=null;A.closeSheet(true);A.render(false);A.toast('地址已删除')};
+function useWechatAddress(result,demo=false){
+ const clean=value=>typeof value==='string'?value.trim():'';
+ const street=clean(result?.streetName),detailNew=clean(result?.detailInfoNew);
+ const address={
+  name:clean(result?.userName),
+  phone:clean(result?.telNumber),
+  region:[result?.provinceName,result?.cityName,result?.countyName].map(clean).filter(Boolean).join(' '),
+  detail:clean(result?.detailInfo)||(detailNew.startsWith(street)?detailNew:[street,detailNew].filter(Boolean).join(' '))
+ };
+ if(Object.values(address).some(value=>!value)){
+  A.toast('微信地址信息不完整，请重新选择或手动填写');
+  return;
+ }
+ const comparable=value=>value.replace(/\s+/g,'');
+ let item=S.addresses.find(item=>Object.entries(address).every(([key,value])=>comparable(item[key])===comparable(value)));
+ if(!item){
+  item={id:'ADDR-'+crypto.randomUUID(),...address,default:false};
+  S.addresses.push(item);
+ }
+ if(A.q('choose'))H['address-choose']({id:item.id});
+ else A.render(false);
+ A.toast(demo?'已使用演示地址':A.route.id==='U10'?'已使用微信收货地址':'微信收货地址已导入');
+}
+
+let choosingWechatAddress=false;
+H['address-wechat']=async(_data,button)=>{
+ if(choosingWechatAddress||A.route.id!=='U11'||!S.member)return;
+ const host=A.MemberCenter?.host;
+ const wx=window.wx;
+ if(typeof host?.chooseAddress!=='function'&&typeof wx?.chooseAddress!=='function'){
+  A.openSheet('使用微信收货地址',`<p>请在微信小程序内选择你的微信收货地址。当前浏览器可以用示例地址体验导入流程。</p><div class="ux-stack ux-gap">${A.button('使用演示地址','address-wechat-demo')}${A.button('手动填写','go',{route:'U12',params:JSON.stringify({choose:A.q('choose')})},'outline')}</div>`);
+  return;
+ }
+ choosingWechatAddress=true;
+ button.disabled=true;
+ button.textContent='等待选择地址…';
+ try{
+  const result=typeof host?.chooseAddress==='function'
+   ?await host.chooseAddress()
+   :await new Promise((success,fail)=>wx.chooseAddress({success,fail}));
+  if(button.isConnected&&A.route.id==='U11'&&S.member)useWechatAddress(result);
+ }catch(error){
+  if(!button.isConnected||A.route.id!=='U11'||!S.member)return;
+  const reason=String(error?.code||'')+' '+String(error?.errMsg||error?.message||'');
+  A.toast(/cancel/i.test(reason)?'已取消选择微信地址':/deny|denied|auth|privacy|permission/i.test(reason)?'未获得微信地址授权，可重试或手动填写':'微信地址暂未获取，请重试或手动填写');
+ }finally{
+  choosingWechatAddress=false;
+  button.disabled=false;
+  button.textContent='使用微信收货地址';
+ }
+};
+H['address-wechat-demo']=()=>{
+ if(A.route.id!=='U11'||!S.member)return;
+ useWechatAddress({userName:'体验收件人',telNumber:'13800000000',provinceName:'广东省',cityName:'深圳市',countyName:'南山区',detailInfo:'演示路 88 号 · 原型体验地址'},true);
+};
+
 H.regions=()=>A.openSheet('选择所在地区',`<div class="ux-stack">${['广东省 深圳市 南山区','广东省 深圳市 罗湖区','上海市 上海市 黄浦区','北京市 北京市 朝阳区'].map(x=>`<button class="ux-listrow" ${A.attr('region-choose',{value:x})}>${x}</button>`).join('')}</div>`);H['region-choose']=d=>{const form=$('[data-form="address"]');form.elements.region.value=d.value;form.querySelector('[data-region-text]').textContent=d.value;A.closeSheet(true)};
 H['submit-order']=async(d,el)=>{if(A.orderSubmitting)return;const address=S.addresses.find(x=>x.id===S.selectedAddress)||S.addresses[0];if(!address){A.toast('请先添加收货地址');return;}if(A.q('state')==='price-change'&&!S.acceptedCheckoutPrice){A.confirm('价格已更新','请核对新金额后继续。这里为价格变化的演示反馈。','checkout-price-confirm');return;}if(A.q('state')==='stock-change'){A.openSheet('库存发生变化',`<p>部分规格无法满足当前数量，请返回购物袋调整。</p>${A.button('返回购物袋','go',{route:'U09'},'ux-gap')}`);return;}A.orderSubmitting=true;el.disabled=true;el.textContent='正在提交…';await new Promise(r=>setTimeout(r,450));if(A.q('state')==='submit-error'){A.orderSubmitting=false;el.disabled=false;el.textContent='提交订单';A.toast('提交未完成，请重试，商品和地址已保留');return;}const id='DEMO'+Date.now().toString().slice(-9),total=A.total(S.checkoutItems)-(S.coupon?.amount||0),o={id,status:'待支付',items:S.checkoutItems.map(i=>({...i,name:A.product(i.pid).name})),total,coupon:S.coupon?structuredClone(S.coupon):null,address:structuredClone(address),source:S.checkoutSource,sourceBagKeys:S.checkoutSource==='bag'?S.checkoutItems.map(i=>({key:itemKey(i),qty:i.qty})):[],created:new Date().toISOString()};S.orders.unshift(o);A.orderSubmitting=false;A.track('order_created',{id});A.go('U15',{id});H['pay-demo']({id});};H['checkout-price-confirm']=()=>{S.acceptedCheckoutPrice=true;A.closeSheet(true);A.toast('已确认演示金额，可继续提交')};
 H['pay-demo']=d=>A.openSheet('支付流程演示',`<p>此处不调用微信支付，请选择一种结果体验后续页面。</p><p class="ux-note ux-spaced">真实支付由微信原生收银台与服务端确认；本原型不会产生扣款。</p><div class="ux-stack ux-gap">${A.button('模拟支付成功','pay-result',{id:d.id,value:'success'})}${A.button('模拟取消支付','pay-result',{id:d.id,value:'cancelled'},'outline')}${A.button('模拟结果确认中','pay-result',{id:d.id,value:'pending'},'outline')}${A.button('模拟支付失败','pay-result',{id:d.id,value:'failed'},'outline')}</div>`);
@@ -37,13 +195,13 @@ H.media=d=>A.openSheet('图片预览',`<img src="assets/${e(d.image)}" alt="商�
 H['send-code']=(d,el)=>{const form=el.closest('form'),phone=form.elements.phone.value.trim();if(!/^1\d{10}$/.test(phone)){A.formError(form,'请输入正确的 11 位手机号');return;}A.formError(form,'');S.codeSent=Date.now();let seconds=60;el.disabled=true;el.textContent=seconds+'s 后重发';clearInterval(A.codeTimer);A.codeTimer=setInterval(()=>{seconds--;if(!el.isConnected||seconds<=0){clearInterval(A.codeTimer);if(el.isConnected){el.disabled=false;el.textContent='重新获取'}}else el.textContent=seconds+'s 后重发'},1000);A.toast('演示验证码：123456')};
 A.handleForm=async(form)=>{const values=Object.fromEntries(new FormData(form)),type=form.dataset.form;A.formError(form,'');
  if(type==='search'){if(!values.keyword?.trim()){const p=$('[data-search-error]');if(p)p.textContent='请输入想寻找的商品或系列';return;}A.search(values.keyword);return;}
- if(type==='address'){if(!values.name?.trim())return A.formError(form,'请填写收货人姓名');if(!/^1\d{10}$/.test(values.phone))return A.formError(form,'请输入正确的手机号码');if(!values.region)return A.formError(form,'请选择所在地区');if(values.detail.trim().length<5)return A.formError(form,'详细地址请至少填写 5 个字');await A.busy(form,()=>{let a=S.addresses.find(x=>x.id===A.q('id'));const update={name:values.name.trim(),phone:values.phone,region:values.region,detail:values.detail.trim(),default:!!values.default};if(update.default)S.addresses.forEach(x=>x.default=false);if(a)Object.assign(a,update);else{a={id:'ADDR'+Date.now(),...update};S.addresses.push(a)}S.selectedAddress=a.id;A.clearFormDraft();A.toast('地址已保存');A.go('U11',{choose:A.q('choose')||''},true)});return;}
+ if(type==='address'){if(!values.name?.trim())return A.formError(form,'请填写收货人姓名');if(!/^1\d{10}$/.test(values.phone))return A.formError(form,'请输入正确的手机号码');if(!values.region)return A.formError(form,'请选择所在地区');if(values.detail.trim().length<5)return A.formError(form,'详细地址请至少填写 5 个字');await A.busy(form,()=>{let a=S.addresses.find(x=>x.id===A.q('id'));const update={name:values.name.trim(),phone:values.phone,region:values.region,detail:values.detail.trim(),default:!!values.default};if(update.default)S.addresses.forEach(x=>x.default=false);if(a)Object.assign(a,update);else{a={id:'ADDR'+Date.now(),...update};S.addresses.push(a)}if(A.q('choose'))S.selectedAddress=a.id;A.clearFormDraft();A.toast('地址已保存');A.go('U11',{choose:A.q('choose')||''},true)});return;}
  if(type==='activity-filters'){A.go('U23',{...A.route.params,city:values.city,status:values.status},true);return;}
  if(type==='login'){if(!values.agree)return A.formError(form,'请先阅读并同意使用条款与隐私政策');A.openSheet('手机号授权体验',`<p>正式系统会调用微信原生手机号授权。</p><p class="ux-note ux-spaced">当前仅使用体验账号，不读取你的微信手机号，也不向外部提交身份信息。</p>${A.button('使用体验账号继续','experience-login',{},'ux-gap')}`);return;}
  if(type==='phone-login'){if(!/^1\d{10}$/.test(values.phone))return A.formError(form,'请输入正确的手机号码');if(!S.codeSent)return A.formError(form,'请先获取演示验证码');if(Date.now()-S.codeSent>300000)return A.formError(form,'验证码已过期，请重新获取');if(values.code!=='123456')return A.formError(form,'验证码不正确，请重新输入');if(!values.agree)return A.formError(form,'请同意使用条款与隐私政策');await A.busy(form,()=>{S.profile.phone=values.phone;A.clearFormDraft();A.login()});return;}
  if(type==='profile'){if(!values.nickname.trim())return A.formError(form,'请填写昵称');if(!/^1\d{10}$/.test(values.phone))return A.formError(form,'请输入正确的手机号码');await A.busy(form,()=>{Object.assign(S.profile,values);A.clearFormDraft();A.toast('个人资料已保存');A.go('U30',{},true)});return;}
  if(type==='booking'){if(!values.name.trim())return A.formError(form,'请填写参与人姓名');if(!/^1\d{10}$/.test(values.phone))return A.formError(form,'请输入正确的手机号码');if(!values.agree)return A.formError(form,'请先阅读并确认活动须知');const a=A.currentActivity();if(S.bookings.some(b=>b.aid===a.id&&['未使用','候补中'].includes(b.status)))return A.formError(form,'你已提交该活动的报名，请在我的活动中查看');await A.busy(form,()=>{const wait=a.mode==='full'||A.q('wait')==='1';const b={id:'ACT'+Date.now(),aid:a.id,status:wait?'候补中':'未使用',session:S.session?.label||a.date+' '+a.time};S.bookings.push(b);A.clearFormDraft();A.go('U26',{id:a.id,wait:wait?'1':'0'},true)});return;}
- if(type==='refund-select'){if(values.item==null)return A.formError(form,'请选择需要售后的商品');const o=A.currentOrder(),i=o.items[Number(values.item)];if(S.refunds.some(r=>r.order===o.id&&r.pid===i.pid&&!['已关闭','已拒绝','已完成'].includes(r.stage)))return A.formError(form,'该商品已有处理中申请，可在售后记录中查看');const unit=Math.round(i.price*(o.total/A.total(o.items))*100)/100;S.refundDraft={order:o.id,pid:i.pid,qty:i.qty,maxQty:i.qty,amount:i.qty*unit,unit,type:values.type};A.go('U19');return;}
+ if(type==='refund-select'){if(values.item==null)return A.formError(form,'请选择需要售后的商品');const o=A.currentOrder(),i=o.items[Number(values.item)];if(S.refunds.some(r=>r.order===o.id&&r.pid===i.pid&&!['已关闭','已拒绝','已完成'].includes(r.stage)))return A.formError(form,'该商品已有处理中申请，可在售后记录中查看');const unit=Math.round(i.price*((o.quote?.merchandisePayable??o.total)/A.total(o.items))*100)/100;S.refundDraft={order:o.id,pid:i.pid,qty:i.qty,maxQty:i.qty,amount:i.qty*unit,unit,type:values.type};A.go('U19');return;}
  if(type==='refund'){const r=S.refundDraft||{order:A.currentOrder().id,pid:'halo',maxQty:1,unit:980,type:'退货退款'};if(values.reason==='请选择')return A.formError(form,'请选择申请原因');const qty=Number(values.qty);if(!Number.isInteger(qty)||qty<1||qty>(r.maxQty||1))return A.formError(form,'申请数量需在可售后数量范围内');if(A.q('state')==='upload-error'&&values.evidence?.size)return A.formError(form,'凭证上传失败，请重新选择或移除凭证');if(A.q('state')==='submit-error')return A.formError(form,'提交未完成，请稍后重试，填写内容已保留');await A.busy(form,()=>{const id='AS'+Date.now();S.refunds.unshift({id,order:r.order,pid:r.pid,qty,amount:qty*r.unit,type:r.type,reason:values.reason,stage:'申请中'});A.clearFormDraft();A.go('U20',{id},true);A.toast('售后申请已提交（演示）')});return;}
  if(type==='return-logistics'){if(values.carrier==='请选择')return A.formError(form,'请选择物流公司');if(!/^[a-zA-Z0-9-]{6,40}$/.test(values.tracking))return A.formError(form,'请填写 6–40 位有效物流单号');await A.busy(form,()=>{const r=A.currentRefund();r.carrier=values.carrier;r.tracking=values.tracking;r.stage='待处理';A.clearFormDraft();A.go('U20',{id:r.id},true);A.toast('退货物流已保存')});}
 };H['experience-login']=()=>{A.closeSheet(true);A.clearFormDraft();A.login()};

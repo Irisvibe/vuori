@@ -1,0 +1,45 @@
+.vui-headband-compare {
+  padding: var(--vui-primitive-space-24) var(--vui-semantic-space-gutter) 0;
+  font: var(--vui-primitive-weight-regular) var(--vui-primitive-font-size-12)/20px var(--vui-semantic-font-family);
+  font-synthesis: none;
+  color: var(--vui-semantic-color-text);
+}
+.vui-hb-intro {margin-bottom: var(--vui-semantic-space-heading-gap)}
+.vui-hb-title-row {display: flex; align-items: baseline; justify-content: space-between; gap: var(--vui-semantic-space-related)}
+.vui-hb-title-row h2 {margin: 0; font-size: var(--vui-primitive-font-size-20); line-height: 28px; font-weight: 500}
+.vui-hb-title-row > span, .vui-headband-compare .vui-hb-note {font-size: var(--vui-primitive-font-size-10); line-height: 14px}
+.vui-hb-title-row > span {white-space: nowrap; color: var(--vui-semantic-color-text-secondary)}
+.vui-hb-intro p {margin: var(--vui-primitive-space-4) 0 0; color: var(--vui-semantic-color-text-secondary)}
+.vui-hb-table {width: 100%; table-layout: fixed; border-collapse: separate; border-spacing: 0; text-align: left}
+.vui-hb-table :is(th, td) {vertical-align: top; padding: 0; text-align: left}
+.vui-hb-table :is(thead th, td):first-child {padding-right: calc(var(--vui-semantic-space-related) / 2)}
+.vui-hb-table :is(thead th, td):last-child {padding-left: calc(var(--vui-semantic-space-related) / 2)}
+.vui-hb-media {height: var(--vui-component-headband-compare-image-height); background: var(--vui-semantic-color-surface-muted)}
+.vui-hb-media > img {width: 100%; height: 100%; display: block; object-fit: cover}
+.vui-hb-placeholder {height: 100%; display: grid; place-content: center; justify-items: center; gap: var(--vui-semantic-space-related); font-weight: 400; color: var(--vui-semantic-color-text-secondary)}
+.vui-hb-placeholder svg {width: 26px; height: 26px}
+.vui-hb-picker {
+  min-height: var(--vui-component-headband-compare-picker-height);
+  position: relative; display: flex; align-items: center; justify-content: space-between;
+  gap: var(--vui-primitive-space-4); padding-inline: var(--vui-semantic-space-related) var(--vui-primitive-space-4);
+  container-type: inline-size;
+  background: var(--vui-semantic-color-surface-raised); border: 1px solid var(--vui-semantic-color-border); border-top: 0;
+}
+.vui-hb-picker [data-hb-name] {min-width: 0; font-size: var(--vui-primitive-font-size-16); line-height: 22px; font-weight: 500}
+.vui-hb-word {white-space: nowrap}
+.vui-hb-word sup {font-size: .625em; line-height: 0; vertical-align: .22em}
+@container (max-width: 148px) {
+  .vui-hb-picker [data-hb-name] {font-size: var(--vui-primitive-font-size-12); line-height: 16px}
+}
+.vui-hb-picker svg {width: 14px; height: 14px}
+.vui-hb-picker select {position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; font: inherit; cursor: pointer}
+.vui-hb-picker:focus-within {outline: 1px solid var(--vui-semantic-color-text); outline-offset: -1px}
+.vui-hb-picker:active {background: var(--vui-semantic-color-surface-muted)}
+.vui-headband-compare svg {fill: none; stroke: currentColor; stroke-width: 1.35; stroke-linecap: round; stroke-linejoin: round; flex: none}
+.vui-hb-table thead th {padding-bottom: var(--vui-semantic-space-related)}
+.vui-hb-table .vui-hb-dimension {padding-top: var(--vui-primitive-space-12); border-top: 1px solid var(--vui-semantic-color-divider); font-weight: 500}
+.vui-hb-dimension span {display: flex; align-items: center; gap: var(--vui-primitive-space-6)}
+.vui-hb-dimension svg {width: 16px; height: 16px}
+.vui-hb-table .vui-hb-values td {padding-top: var(--vui-primitive-space-4); padding-bottom: var(--vui-primitive-space-12); color: var(--vui-semantic-color-text-secondary); overflow-wrap: anywhere}
+.vui-hb-note {margin: 0; border-top: 1px solid var(--vui-semantic-color-divider); padding-top: var(--vui-primitive-space-12); color: var(--vui-semantic-color-text-secondary)}
+.vui-hb-sr {position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap}

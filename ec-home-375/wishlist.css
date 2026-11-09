@@ -1,0 +1,23 @@
+.wishlist{--wishlist-gutter:var(--vui-semantic-space-gutter,16px);min-height:100%;padding:18px var(--wishlist-gutter) 32px;background:#fff}
+.wishlist-crumb{display:flex;align-items:center;gap:6px;margin-bottom:18px;color:var(--secondary);font-size:12px;line-height:18px}
+.wishlist-crumb button{min-height:28px;cursor:pointer}
+.wishlist h1{font-size:20px;line-height:28px;font-weight:500}
+.wishlist-intro{margin-top:8px;font-size:16px;line-height:24px}
+.wishlist-recent{margin-top:40px}
+.wishlist-recent h2{margin-bottom:16px;font-size:16px;line-height:22px;font-weight:500}
+.wishlist-note{margin-bottom:12px;color:var(--secondary);font-size:12px;line-height:18px}
+.wishlist-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 8px;margin-top:16px}
+.wishlist-rail{display:grid;grid-auto-flow:column;grid-auto-columns:clamp(120px,36vw,144px);gap:4px;overflow-x:auto;overscroll-behavior-x:contain;margin-right:calc(-1 * var(--wishlist-gutter));padding:0 var(--wishlist-gutter) 5px 0;scroll-snap-type:x proximity;scrollbar-width:none}
+.wishlist-rail::-webkit-scrollbar{display:none}
+.wishlist-item{position:relative;min-width:0;scroll-snap-align:start}
+.wishlist-item .ux-card{display:flex;flex-direction:column;align-items:flex-start}
+.wishlist-item .ux-card-media{height:auto;aspect-ratio:4/5}
+.wishlist-item .ux-card-media img{display:block}
+.wishlist-item .ux-swatches{order:1;margin-top:10px;min-height:20px}
+.wishlist-item .ux-card-title{order:2;margin-top:8px}
+.wishlist-item .ux-card p{order:3;margin:3px 0 0}
+.wishlist-item .ux-card-price{order:4;margin-top:4px;color:var(--secondary);font-weight:400}
+.wishlist-save{position:absolute;top:4px;right:4px;display:grid;place-items:center;width:40px;height:40px;background:#ffffffe6;border-radius:50%;cursor:pointer}
+.wishlist-save svg{width:18px;height:18px}
+.wishlist-save[aria-pressed="true"] svg{fill:currentColor}
+.wishlist :is(button,.wishlist-rail):focus-visible{outline:1px solid var(--ink);outline-offset:-2px}

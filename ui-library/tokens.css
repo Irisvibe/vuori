@@ -165,4 +165,6 @@
   --vui-component-color-palette-swatch-size:44px;
   --vui-component-color-palette-card-min-height:84px;
   --vui-component-color-palette-group-gap:16px;
+  --vui-component-headband-compare-image-height:156px;
+  --vui-component-headband-compare-picker-height:var(--vui-primitive-space-48);
 }

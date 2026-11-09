@@ -1,6 +1,6 @@
 /* Figma 1725:3663 and 1802:1198. */
 (function(){const A=window.VuoriApp,S=A.state,D=A.D,e=A.esc;
-const img=(n,alt='',cls='')=>`<img class="${cls}" src="assets/my1725/${n}.${n==='imgImageVuori'?'png.webp?v=20261104-pages':'svg'}" alt="${alt}">`;
+const img=(n,alt='',cls='')=>`<img class="${cls}" src="assets/my1725/${n}.${n==='imgImageVuori'?'png.webp':'svg'}" alt="${alt}">`;
 const go=(id,auth=true,params={})=>A.attr(auth?'member-go':'go',{route:id,params:JSON.stringify(params)});
 const arrow=()=>`<span class="m1725-arrow">${img('imgArrowBack')}</span>`;
 const head=(title,label,id)=>`<div class="m1725-section-head"><h2>${title}</h2><button ${go(id)}>${label}${arrow()}</button></div>`;

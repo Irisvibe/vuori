@@ -1,0 +1,23 @@
+.checkout-page{background:var(--snow)}
+.checkout-page .ux-section{padding-block:20px}
+.checkout-page .ux-section>h3{margin-bottom:12px}
+.checkout-address{align-items:center;text-align:left}
+.checkout-address-detail{display:block;margin-top:5px;color:var(--secondary)}
+.checkout-offer{display:inline-block;padding:2px 6px;background:var(--line);color:var(--ink);font-size:10px;line-height:16px}
+.checkout-address .checkout-offer{margin-left:6px}
+.checkout-products .checkout-item{padding-block:12px}
+.checkout-products .checkout-item+.checkout-item{border-top:1px solid var(--line)}
+.checkout-item-price{display:flex;align-items:baseline;gap:8px;margin:8px 0;color:var(--ink);font-size:12px;line-height:16px}
+.checkout-item-price strong{font-weight:500}
+.checkout-item-price s,.checkout-item-price span{color:var(--secondary)}
+.checkout-item-price span{margin-left:auto}
+.checkout-pricing .ux-money-row{margin-top:8px}
+.checkout-payment-amount strong{display:block;margin-top:6px;font-size:32px;line-height:40px;font-weight:500}
+.checkout-method{display:flex;align-items:center;justify-content:space-between;min-height:44px;border-bottom:1px solid var(--line)}
+.checkout-method svg{width:18px;height:18px}
+.checkout-campaign{min-height:130px;padding:16px;background:#333;text-align:left;color:#f8f8f8;display:flex;align-items:flex-end;cursor:pointer}
+.checkout-campaign-copy{display:grid;gap:5px}
+.checkout-campaign small{font-size:10px}
+.checkout-campaign strong{font-size:18px;font-weight:500}
+.checkout-campaign-copy>span{display:flex;align-items:center;gap:6px;font-size:12px}
+.checkout-campaign svg{width:16px;height:16px}
