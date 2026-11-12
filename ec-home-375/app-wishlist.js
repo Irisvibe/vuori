@@ -1,74 +1,78 @@
 (function(){
 const A=window.VuoriApp,{D,$,attr,esc}=A;
-const route='U44';
-const recentKey='vuori-recent-products';
-const recentLimit=12;
-let recent=[];
-try{
- const stored=JSON.parse(localStorage.getItem(recentKey)||'[]');
- if(Array.isArray(stored))recent=[...new Set(stored.filter(id=>typeof id==='string'))].slice(0,recentLimit);
-}catch{}
+const isWishlist=id=>id==='U40'||id==='U44';
+D.pages.push(['U44','我的收藏','购物袋与结算']);
 
-D.pages.push([route,'心愿单','购物袋与结算']);
-
-function recordVisit(){
- if(A.route.id!=='U08'||!$('.pdp-summary'))return;
- const id=A.currentProduct().id;
- if(recent[0]===id)return;
- recent=[id,...recent.filter(value=>value!==id)].slice(0,recentLimit);
- try{localStorage.setItem(recentKey,JSON.stringify(recent));}catch{}
+const icon=(name,folder='wishlist2193')=>`<img src="assets/${folder}/${name}.svg" alt="">`;
+function card(product){
+ const color=A.state.cardColors[product.id]??0;
+ const image=product.pdpConfig?.colorImages?.[color]||'assets/'+product.image;
+ const detail=attr('product',{id:product.id,color});
+ const prefix=product.name.split(' ')[0]+' ';
+ const title=product.cn.startsWith(prefix)?product.cn.slice(prefix.length):product.cn;
+ const name=product.fabric==='DreamKnit'?'DreamKnit™':product.name;
+ return `<article class="wishlist-item member-favorite">
+  <div class="wishlist-image">
+   <button class="wishlist-media" ${detail}><img src="${esc(image)}" alt="${esc(product.cn)}"></button>
+   <button class="wishlist-save member-remove-favorite" type="button" aria-label="取消收藏 ${esc(product.cn)}" aria-pressed="true" ${attr('wishlist-save',{pid:product.id})}>${icon('imgIcon5')}</button>
+  </div>
+  ${A.colorButtons(product,color)}
+  <button class="wishlist-product" ${detail}><span>${esc(name)}</span><span>${esc(title)}</span></button>
+  <p class="wishlist-color">${esc(product.colors[color]?.[0]||'')}</p>
+  ${A.productPrice(product.price,product.compareAtPrice)}
+  <button class="wishlist-add" ${attr('wishlist-add',{pid:product.id,color})} ${product.retired?'disabled':''}>加入购物袋</button>
+ </article>`;
 }
-
-function card(product,showRemove=false){
- return `<div class="wishlist-item">
-  ${A.card(product,true)}
-  ${showRemove?`<button class="wishlist-save" type="button" aria-label="取消收藏 ${esc(product.name)}" aria-pressed="true" ${attr('wishlist-save',{pid:product.id})}>${A.icon('heart')}</button>`:''}
+function wishlist(){
+ const saved=A.q('state')==='empty'?[]:D.products.filter(product=>A.PDP.liked.has(product.id));
+ return `<div class="wishlist${saved.length?'':' wishlist--empty'}" data-node-id="2193:11081">
+  <div class="wishlist-heading"><h1>我的收藏</h1><span>${saved.length}件商品</span></div>
+  ${saved.length?`<div class="wishlist-grid">${saved.map(card).join('')}</div>`:A.commerceEmpty({title:'还没有收藏商品',icon:'heart',label:'去发现单品'})}
  </div>`;
 }
+A.views.U44=wishlist;
+A.views.U40=()=>A.state.member?wishlist():`<div class="ux-page">${A.gate()}</div>`;
 
-A.views[route]=()=>{
- const saved=D.products.filter(product=>A.PDP.liked.has(product.id));
- const viewed=recent.map(id=>D.products.find(product=>product.id===id)).filter(product=>product&&!product.retired);
- return `<div class="wishlist">
-  <nav class="wishlist-crumb" aria-label="当前位置"><button ${attr('root',{route:'U01'})}>首页</button><span aria-hidden="true">/</span><span aria-current="page">心愿单</span></nav>
-  <section aria-labelledby="wishlist-title">
-   <h1 id="wishlist-title">我的心愿单</h1>
-   ${saved.length?`<div class="wishlist-grid">${saved.map(product=>card(product,true)).join('')}</div>`:'<p class="wishlist-intro">还没有收藏。遇到喜欢的单品，点亮爱心，就能在这里找到。</p>'}
-  </section>
-  <section class="wishlist-recent" aria-labelledby="wishlist-recent-title">
-   <h2 id="wishlist-recent-title">最近浏览</h2>
-   ${viewed.length?`<div class="wishlist-rail" tabindex="0" role="region" aria-label="最近浏览商品，可左右滑动">${viewed.map(product=>card(product)).join('')}</div>`:`<p class="wishlist-note">浏览过的单品会出现在这里。</p>${A.link('探索商品','U03')}`}
-  </section>
- </div>`;
+A.actions['wishlist-save']=({pid})=>{
+ if(!A.PDP.liked.has(pid))return;
+ A.confirmCentered('确定取消收藏吗？',[
+  '这件商品将从收藏夹移除。','想再次收藏，可前往商品详情页。'
+ ],'wishlist-remove-confirm',{pid});
 };
-
-A.actions['wishlist-save']=async(data,button)=>{
+A.actions['wishlist-remove-confirm']=async({pid},button)=>{
+ const panel=button.closest('.centered-confirm');
+ const error=panel.querySelector('.centered-confirm-error');
+ error.hidden=true;
  button.disabled=true;
  try{
-  await A.actions['pdp-favorite'](data);
-  if(A.route.id===route)A.render(false);
- }finally{button.disabled=false;}
+  await A.setFavorite(pid,false);
+  if(panel.isConnected&&isWishlist(A.route.id)){
+   A.render(false);
+   $('#ux-sheet').addEventListener('close',()=>{
+    $('.wishlist-save, .wishlist .ux-empty button')?.focus({preventScroll:true});
+   },{once:true});
+  }
+  A.toast('已取消收藏');
+ }catch(err){
+  error.textContent=err.message||'暂未取消收藏，请重试。';
+  error.hidden=false;
+ }finally{button.disabled=false}
 };
+A.actions['wishlist-add']=({pid,color})=>A.actions['pdp-open']({pid,color,intent:'add',wishlist:true});
 
 const render=A.render;
 A.render=function(...args){
- const rail=$('.wishlist-rail');
- const scrollLeft=rail?.scrollLeft||0;
- const active=document.activeElement;
- const action=active?.closest('.wishlist')?active.dataset:null;
- const inRail=!!active?.closest('.wishlist-rail');
+ const active=isWishlist(A.parse().id);
+ document.body.classList.toggle('wishlist-mode',active);
+ const focused=document.activeElement?.closest('.wishlist .ux-swatch')?.dataset;
  render(...args);
- recordVisit();
-
- if(A.route.id===route){
-  const nextRail=$('.wishlist-rail');
-  if(nextRail)nextRail.scrollLeft=scrollLeft;
-  if(action?.ux){
-   const region=$(inRail?'.wishlist-rail':'.wishlist-grid');
-   const match=Array.from(region?.querySelectorAll('[data-ux]')||[]).find(button=>
-    button.dataset.ux===action.ux&&button.dataset.pid===action.pid&&button.dataset.color===action.color);
-   match?.focus({preventScroll:true});
-  }
- }
+ if(!active)return;
+ $('.system').innerHTML=`<span class="time">9:41</span><div class="system-icons">${['imgIcon','imgIcon1','imgIcon2'].map(name=>icon(name)).join('')}</div>`;
+ $('#app-header').innerHTML=`<div class="wishlist-header-nav" role="group" aria-label="页面导航">
+  <button ${attr('back')} aria-label="返回">${icon('img')}</button><i></i><button ${attr('root',{route:'U01'})} aria-label="首页">${icon('header-home','bag2075')}</button>
+ </div><div class="wishlist-header-menu" aria-label="微信小程序菜单">${icon('imgIcon3')}<i></i>${icon('imgIcon4')}</div>`;
+ if(focused)Array.from(document.querySelectorAll('.wishlist .ux-swatch')).find(button=>
+  button.dataset.pid===focused.pid&&button.dataset.color===focused.color
+ )?.focus({preventScroll:true});
 };
 })();

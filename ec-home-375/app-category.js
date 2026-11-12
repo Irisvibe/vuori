@@ -164,7 +164,8 @@ const render=A.render;A.render=function(...args){
  render(...args);
  if(A.route.id==='U02')bind();
  if(A.route.id==='U03'&&A.$('.catalog-hair-page')){
-  A.$('#app-header .ux-headtitle').textContent='发饰';
+  const title=A.$('#app-header .ux-headtitle');
+  if(title)title.textContent='发饰';
   if(!history.state?.depth)C.active='accessories';
  }
 };

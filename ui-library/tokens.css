@@ -128,14 +128,17 @@
   --vui-component-color-card-title-height:16px;
   --vui-component-color-card-title-max-width:120px;
   --vui-component-tab-scene-height:24.75px;
-  --vui-component-quick-buy-height:417px;
+  --vui-component-quick-buy-height:359px;
   --vui-component-quick-buy-padding-top:20px;
   --vui-component-quick-buy-padding-bottom:24px;
   --vui-component-quick-buy-bottom-reserve:8px;
   --vui-component-quick-buy-product-gap:14px;
   --vui-component-quick-buy-image-width:72px;
   --vui-component-quick-buy-image-height:90px;
+  --vui-component-quick-buy-swatch-size:26px;
+  --vui-component-quick-buy-swatch-gap:var(--vui-primitive-space-12);
   --vui-component-quick-buy-size-min-width:44px;
+  --vui-component-quick-buy-size-width:62px;
   --vui-component-quick-buy-size-height:40px;
   --vui-component-quick-buy-confirm-height:44px;
   --vui-component-pdp-summary-padding-y:24px;

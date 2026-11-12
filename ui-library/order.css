@@ -1,0 +1,172 @@
+/* Order list reference: Figma 2324:8128. Shared by the order flow. */
+.vui-order-mode #app-header{
+  display:grid;
+  grid-template-columns:82px minmax(0,1fr) 82px;
+  gap:8px;
+  border-bottom:0;
+}
+.vui-order-header-title{
+  text-align:center;
+  font-size:12px;
+  font-weight:500;
+  line-height:16px;
+}
+.vui-order-nav,.vui-order-menu{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid #e7e7e4;
+  border-radius:var(--vui-primitive-radius-capsule,20px);
+}
+.vui-order-nav{width:68.4px;height:30.3px;gap:4px}
+.vui-order-nav button{display:grid;place-items:center;width:24px;height:28px;cursor:pointer}
+.vui-order-nav i{width:1px;height:12px;background:#e9e9e5}
+.vui-order-menu{height:30px;gap:7px;border-color:#33333330}
+.vui-order-menu i{width:1px;height:17px;background:#3333}
+.vui-order-nav img,.vui-order-menu img,.vui-order-system img{display:block}
+
+.vui-order-page{
+  font-family:'Aktiv Grotesk','Noto Sans CJK SC',sans-serif;
+  font-synthesis:none;
+  background:var(--vui-semantic-color-surface,#f8f8f8);
+}
+.vui-order-mode .ux-page > .ux-pad > h2{
+  font-size:var(--vui-primitive-font-size-16,16px);
+  line-height:22px;
+}
+.vui-order-list-page > .ux-tabs{
+  border:0;
+  padding:22px var(--vui-semantic-space-gutter,16px) 16px;
+  gap:24px;
+}
+.vui-order-list-page > .ux-tabs > button{
+  border-bottom:0;
+  line-height:16px;
+  color:var(--vui-semantic-color-text-secondary,#5a5a5a);
+}
+.vui-order-list-page > .ux-tabs > button.selected{
+  color:var(--vui-semantic-color-text,#333);
+  font-weight:500;
+}
+.vui-order-list{
+  display:grid;
+  gap:16px;
+  margin-inline:var(--vui-semantic-space-gutter,16px);
+}
+.vui-order-list .vui-order-card{
+  display:grid;
+  gap:2px;
+  min-width:0;
+  margin:0;
+  padding:0;
+  border:0;
+}
+.vui-order-panel{
+  min-width:0;
+  padding:16px 8px 0;
+  background:var(--vui-semantic-color-surface-raised,#fff);
+  border-radius:var(--vui-primitive-radius-subtle,2px);
+}
+.vui-order-card-heading,.vui-order-summary,.vui-order-totals{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+}
+.vui-order-status{flex:none;font-size:10px;line-height:16px;font-weight:500}
+.vui-order-status.is-receiving{
+  padding:2px 8px;
+  color:var(--vui-semantic-color-surface,#f8f8f8);
+  background:var(--vui-semantic-color-text,#333);
+}
+.order-metadata{min-width:0;color:var(--vui-semantic-color-text-secondary,#5a5a5a)}
+.order-number{display:flex;align-items:center;gap:4px;font-size:10px;line-height:16px}
+.order-number > span:first-child{flex:none}
+.order-number-value{min-width:0;overflow-wrap:anywhere;color:var(--vui-semantic-color-text,#333)}
+.order-copy{display:grid;place-items:center;flex:none;width:22px;height:20px;padding:0;color:inherit;cursor:pointer}
+.order-copy svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.order-copy:focus-visible,.vui-order-nav button:focus-visible{outline:1px solid currentColor;outline-offset:1px}
+.order-metadata .order-created,.vui-order-summary .order-created{margin:0;font-size:10px;line-height:16px}
+.vui-order-summary{
+  padding-bottom:10px;
+  color:var(--vui-semantic-color-text-secondary,#5a5a5a);
+  font-size:10px;
+  line-height:16px;
+}
+.vui-order-totals{justify-content:flex-end;flex-wrap:wrap;column-gap:8px;row-gap:0;text-align:right}
+.vui-order-totals strong{color:var(--vui-semantic-color-text,#333);font-weight:500;line-height:14px}
+
+.vui-order-page .ux-item{border-bottom:0;padding-block:20px 10px}
+.vui-order-page .ux-item-price{font-weight:400;line-height:16px}
+.vui-order-page .ux-item h4{font-weight:500}
+.vui-order-page .ux-item-info > p,.vui-order-page .ux-item-info .ux-note{font-size:10px;line-height:16px}
+.vui-order-page .ux-items.vui-order-panel{margin-inline:var(--vui-semantic-space-gutter,16px);padding-top:0}
+.vui-order-page .vui-order-section{margin:2px var(--vui-semantic-space-gutter,16px) 0;padding:12px 8px}
+.vui-order-page .ux-order-actions{
+  flex-wrap:wrap;
+  gap:10px;
+}
+.vui-order-card > .ux-order-actions{
+  margin:0;
+  padding:12px 8px;
+}
+.vui-order-page .ux-order-actions > .ux-btn,
+.order-detail-page .ux-bottom > .ux-btn{
+  flex:0 0 auto;
+  height:34px;
+  min-height:34px;
+  min-width:0;
+  padding:0 12px;
+  font-weight:400;
+  line-height:16px;
+  white-space:nowrap;
+}
+.order-detail-page .ux-bottom{
+  justify-content:flex-end;
+  flex-wrap:wrap;
+  padding-block:12px;
+  background:var(--vui-semantic-color-surface-raised,#fff);
+}
+.order-detail-page .ux-bottom > .ux-btn{flex:0 0 auto;width:auto}
+.order-detail-page .ux-bottom > .order-primary-action{width:min(343px,100%)}
+.order-detail-page .order-detail-summary{padding:16px 12px 0}
+.order-detail-summary h3{margin:0 0 8px;font-size:12px;font-weight:500;line-height:16px}
+.order-detail-amount .ux-money-row{margin-top:4px;line-height:18px}
+.order-detail-amount .ux-money-row:not(.total) > span:first-child,
+.order-detail-address-line{color:var(--vui-semantic-color-text-secondary,#5a5a5a)}
+.order-detail-amount .ux-money-row.total{margin-top:10px;padding-top:10px;align-items:baseline}
+.order-detail-amount .ux-money-row.total strong{font-size:20px;line-height:24px}
+.order-detail-info,.order-detail-address,.order-detail-services{
+  margin-top:12px;
+  padding-top:12px;
+  border-top:1px solid var(--vui-semantic-color-surface-muted,#ededed);
+}
+.order-detail-info h3{margin-bottom:2px}
+.order-detail-info .order-copy{width:30px;height:24px}
+.order-detail-summary .order-detail-recipient{
+  display:flex;
+  flex-wrap:wrap;
+  gap:2px 8px;
+  font-size:12px;
+  font-weight:500;
+  line-height:18px;
+}
+.order-detail-summary .order-detail-address-line{margin-top:4px;font-size:12px;line-height:18px;overflow-wrap:anywhere}
+.order-detail-services{padding-top:0}
+.order-detail-services .ux-listrow{min-height:44px;padding-block:8px}
+.order-detail-services .ux-listrow:last-child{border-bottom:0}
+.order-detail-summary > .ux-order-actions{margin:0;padding-block:8px 12px}
+
+.vui-order-end{
+  display:grid;
+  justify-items:center;
+  gap:16px;
+  padding:16px 16px 30px;
+  text-align:center;
+  color:var(--vui-semantic-color-text-muted,#868686);
+}
+.vui-order-end img{display:block;max-width:100%}
+.vui-order-end > span{font-size:10px;line-height:14px}
+.vui-order-list-page .member-local-note{text-align:center}
+.vui-order-mode .home-indicator{height:24px}
+.vui-order-mode .home-indicator::after{content:none}

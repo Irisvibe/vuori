@@ -1,0 +1,4 @@
+.vui-product-price{display:inline-flex;max-width:100%;align-items:baseline;flex-wrap:wrap;gap:0 8px;vertical-align:baseline;font-family:'Aktiv Grotesk','Noto Sans CJK SC';font-size:12px;line-height:16px;font-weight:400;font-synthesis:none}
+.vui-product-price>.vui-price-current,.vui-product-price>.vui-price-original{color:var(--vui-semantic-color-text-muted,#868686);white-space:nowrap}
+.vui-product-price.is-discounted>.vui-price-current{color:var(--vui-semantic-color-text,#333)}
+.vui-product-price>.vui-price-original{text-decoration:line-through}

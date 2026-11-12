@@ -6,11 +6,14 @@ D.pages.push([paymentRoute,'微信支付','购物袋与结算']);
 
 const rules={orderThreshold:2000,orderDiscount:100,freeShippingThreshold:500,shipping:15,reservationMinutes:15};
 const drafts=new WeakMap();
+const acceptedTerms=new WeakSet();
 let acceptedPriceItems;
 const orderById=id=>S.orders.find(order=>order.id===id);
 const currentOrder=()=>orderById(A.q('id'));
 const address=A.checkoutAddress=()=>S.addresses.find(item=>item.id===S.selectedAddress)||S.addresses.find(item=>item.default)||S.addresses[0];
 const go=(route,params={})=>attr('go',{route,params:JSON.stringify(params)});
+const icon=name=>`<img src="assets/checkout2271/${name}.svg" alt="">`;
+const wechatMethod=()=>`<div class="checkout-method"><span>${icon('wechat')}微信支付</span>${icon('check')}</div>`;
 const skuKey=item=>JSON.stringify([item.pid,Number(item.color??0),item.size,Object.entries(item.extra||{}).sort()]);
 const skuQuantities=items=>{
  const quantities=new Map();
@@ -19,6 +22,8 @@ const skuQuantities=items=>{
 };
 const productFor=item=>D.products.find(product=>product.id===item.pid);
 const round=value=>Math.round(value*100)/100;
+const hasDeliverableAddress=()=>Boolean(address())&&!['no-address','undeliverable'].includes(A.q('state'));
+const canSubmit=items=>hasDeliverableAddress()&&items.length>0&&acceptedTerms.has(items);
 
 function quote(items,coupon=null){
  const subtotal=round(A.total(items));
@@ -36,30 +41,44 @@ function quote(items,coupon=null){
  return {subtotal:round(subtotal+itemDiscount),itemDiscount,orderDiscount,couponDiscount,shipping,merchandisePayable,total:round(merchandisePayable+shipping),eligibleAmount};
 }
 
-function amountRows(value){
- const discount=amount=>amount?'- '+money(amount):money(0);
+function amountRows(value,hideZeroDiscounts=false,couponButton=false){
  return [
-  ['商品金额',money(value.subtotal)],
-  ['商品优惠',discount(value.itemDiscount)],
-  ['订单优惠',discount(value.orderDiscount)],
-  ['优惠券优惠',discount(value.couponDiscount)],
-  ['配送费',money(value.shipping)]
- ].map(([label,amount])=>`<div class="ux-money-row"><span>${label}</span><span>${amount}</span></div>`).join('')
+  ['商品金额',value.subtotal],
+  ['商品优惠',value.itemDiscount,true],
+  ['订单优惠',value.orderDiscount,true],
+  ['优惠券优惠',value.couponDiscount,true],
+  ['配送费',value.shipping]
+ ].filter(([label,amount,discount])=>!hideZeroDiscounts||!discount||amount>0||(couponButton&&label==='优惠券优惠'))
+  .map(([label,amount,discount])=>couponButton&&label==='优惠券优惠'
+   ?`<button class="ux-money-row bag1733-coupon" ${attr('coupons')} aria-label="选择优惠券或输入券码"><span>优惠券</span><span${amount?' class="checkout-discount"':''}>${amount?'- '+money(amount):'未使用'}</span></button>`
+   :`<div class="ux-money-row"><span>${label}</span><span${discount&&amount>0?' class="checkout-discount"':''}>${discount&&amount>0?'- ':''}${money(amount)}</span></div>`).join('')
   +`<div class="ux-money-row total"><span>应付金额</span><strong>${money(value.total)}</strong></div>`;
 }
 A.checkoutSummary=amountRows;
+A.checkoutQuote=quote;
+A.bagCoupon=()=>quote(A.selectedItems(),S.bagCoupon).couponDiscount?S.bagCoupon:null;
+
+A.beginBuyCheckout=(line,{addedToBag=false}={})=>{
+ S.checkoutItems=[{...line}];
+ S.checkoutSource=addedToBag?'buy-with-bag-line':'buy';
+ S.coupon=null;
+ A.closeSheet(true);
+ A.startDemoAuth('U10');
+};
 
 function checkoutItem(item){
  const product=productFor(item);
  const price=item.price??product?.price;
  const original=Number(item.compareAtPrice??product?.compareAtPrice??price);
- const specs=[product?.colors?.[item.color??0]?.[0],item.size,...Object.values(item.extra||{})].filter(Boolean);
+ const color=item.color??0;
+ const specs=[product?.colors?.[color]?.[0],item.size,...Object.values(item.extra||{})].filter(Boolean);
+ const image=product?.pdpConfig?.colorImages?.[color]||(product?'assets/'+product.image:'');
  return `<article class="ux-item checkout-item">
-  ${product?`<img src="assets/${esc(product.image)}" alt="${esc(product.cn)}">`:''}
+  ${image?`<img src="${esc(image)}" alt="${esc(product.cn)}">`:''}
   <div class="ux-item-info">
-   <h4>${esc(item.name||product?.name||'商品')}</h4>
-   <p>${esc([product?.cn,...specs].filter(Boolean).join(' · '))}</p>
-   <div class="checkout-item-price"><strong>${money(price)}</strong>${original>price?`<s>${money(original)}</s>`:''}<span>× ${esc(item.qty)}</span></div>
+   <h4 class="checkout-item-name">${esc(item.name||product?.name||'商品')}${product?.cn?`<span>${esc(product.cn)}</span>`:''}</h4>
+   ${specs.length?`<p class="checkout-item-spec">${esc(specs.join(' / '))}</p>`:''}
+   <div class="checkout-item-price">${A.productPrice(price,original)}<span class="checkout-item-qty">× ${esc(item.qty)}</span></div>
    ${original>price?'<span class="checkout-offer">商品优惠</span>':''}
   </div>
  </article>`;
@@ -72,48 +91,97 @@ V.U10=()=>{
  const noAddress=!selected||state==='no-address';
  const draft=drafts.get(items);
  const value=draft?.quote||quote(items,S.coupon);
- return `<div class="ux-page checkout-page">
+ const quantity=items.reduce((sum,item)=>sum+Number(item.qty),0);
+ return `<div class="ux-page checkout-page" data-node-id="2271:34742">
   ${A.heading('确认订单')}
   <section class="ux-section">
-   <h3>收货地址</h3>
-   ${noAddress?A.row('添加收货地址','go',{route:'U11',params:'{"choose":"1"}'}):`<button class="ux-listrow checkout-address" ${go('U11',{choose:'1'})}>
-    <span><strong>${esc(selected.name)}</strong>　${esc(selected.phone.replace(/(\d{3})\d{4}/,'$1 **** '))}${selected.default?'<small class="checkout-offer">默认</small>':''}
-    <span class="checkout-address-detail">${esc(selected.region+' '+selected.detail)}</span></span>${A.icon('chevron')}
-   </button>`}
+   <h3>配送地址</h3>
+   <div class="checkout-row-surface checkout-address">
+    <button class="ux-listrow checkout-address-main" ${attr('checkout-address-list')}>
+     ${noAddress?'<span>添加地址</span>':`<span><strong>${esc(selected.name)}</strong><span class="checkout-address-phone">${esc(selected.phone.replace(/(\d{3})\d{4}/,'$1 **** '))}</span>${selected.default?'<small class="checkout-offer">默认</small>':''}
+     <span class="checkout-address-detail">${esc(selected.region+' '+selected.detail)}</span></span>`}${icon('address-next')}
+    </button>
+    <button class="checkout-address-wechat" ${attr('address-wechat')}>微信授权</button>
+   </div>
    ${state==='undeliverable'?A.notice('当前地址暂不支持配送，请更换收货地址。'):''}
   </section>
   <section class="ux-section checkout-products">
-   <h3>订单商品</h3>
+   <div class="checkout-products-heading"><h3>订单商品</h3><span>${quantity} 件商品</span></div>
    ${items.length?items.map(checkoutItem).join(''):'<p class="ux-muted">请先选择需要结算的商品。</p>'}
    ${value.orderDiscount?`<span class="checkout-offer">演示满 ${money(rules.orderThreshold)} 减 ${money(rules.orderDiscount)}</span>`:''}
   </section>
   <section class="ux-section checkout-pricing">
    <h3>订单金额</h3>
-   ${A.row('优惠券','coupons',{select:'1'},value.couponDiscount?(draft?.coupon||S.coupon)?.name:'选择优惠券')}
-   ${amountRows(value)}
+   <button class="ux-listrow checkout-row-surface checkout-coupon" ${attr('coupons',{select:'1'})}><span>优惠券</span><span>${esc(value.couponDiscount?(draft?.coupon||S.coupon)?.name:'选择优惠券')}${icon('coupon-next')}</span></button>
+   ${amountRows(value,true)}
    <p class="ux-note ux-spaced">演示运费为 ${money(rules.shipping)}，用券前满 ${money(rules.freeShippingThreshold)} 免配送费。</p>
   </section>
-  <div class="ux-bottom"><div><span class="ux-note">应付金额</span><div class="ux-total">${money(value.total)}</div></div>
-   <button class="ux-btn" ${attr('submit-order')} ${noAddress||!items.length||state==='undeliverable'?'disabled':''}>去支付</button>
+  <section class="ux-section checkout-payment-method">
+   <h3>支付方式</h3>
+   ${wechatMethod()}
+  </section>
+  <div class="ux-bottom checkout-bottom" data-node-id="2271:34868">
+   <div class="checkout-consent">
+    <input class="ux-check" id="checkout-terms" type="checkbox" aria-labelledby="checkout-terms-copy" ${acceptedTerms.has(items)?'checked':''}>
+    <span id="checkout-terms-copy"><label for="checkout-terms">我已仔细阅读并同意VUORI</label><button type="button" ${go('U42',{doc:'purchase'})}>使用条款</button>和<button type="button" ${go('U42',{doc:'returns'})}>退换货政策</button></span>
+   </div>
+   <div class="checkout-footer-summary" data-node-id="2273:34979"><span>共${quantity}件</span><strong id="checkout-pay-amount">合计 ${money(value.total)}</strong></div>
+   <button class="ux-btn" type="button" aria-describedby="checkout-pay-amount" data-node-id="2271:34881" ${attr('submit-order')} ${canSubmit(items)?'':'disabled'}>立即支付</button>
   </div>
  </div>`;
 };
 
-H.coupons=()=>{
- const eligible=quote(S.checkoutItems).eligibleAmount;
- A.openSheet('选择优惠券',`<button class="ux-listrow" ${attr('pick-coupon',{id:'none'})}><span>不使用优惠券</span>${!S.coupon?A.icon('check'):''}</button>
-  ${D.coupons.map(coupon=>{
-   const usable=quote(S.checkoutItems,coupon).couponDiscount>0;
-   const hint=usable?`可减 ${money(Math.min(coupon.amount,eligible))}`:!coupon.online?'仅限门店使用':coupon.status!=='可用'?'优惠券不可用':'未满足使用门槛';
-   return `<button class="ux-listrow" ${attr('pick-coupon',{id:coupon.id})} ${usable?'':'disabled'}><span>${esc(coupon.name)}<br><small class="ux-note">${esc(hint)}</small></span>${S.coupon?.id===coupon.id?A.icon('check'):''}</button>`;
-  }).join('')}`);
-};
-H['pick-coupon']=data=>{
- const coupon=D.coupons.find(item=>item.id===data.id);
- if(data.id!=='none'&&!quote(S.checkoutItems,coupon).couponDiscount)return;
- S.coupon=coupon||null;
+document.addEventListener('change',event=>{
+ if(event.target.id!=='checkout-terms'||A.route.id!=='U10')return;
+ const items=S.checkoutItems;
+ if(event.target.checked)acceptedTerms.add(items);
+ else acceptedTerms.delete(items);
+ event.target.closest('.checkout-bottom').querySelector('[data-ux="submit-order"]').disabled=!canSubmit(items);
+});
+
+const demoCode='DEMO100';
+const codeCoupon={id:'demo-code',name:'演示券码 DEMO100',amount:100,threshold:800,online:true,status:'可用'};
+const couponItems=()=>A.route.id==='U09'?A.selectedItems():S.checkoutItems;
+const activeCoupon=()=>A.route.id==='U09'?A.bagCoupon():S.coupon;
+function setCoupon(coupon){
+ if(A.route.id==='U09'||S.checkoutSource==='bag')S.bagCoupon=coupon;
+ if(A.route.id==='U10')S.coupon=coupon;
  A.closeSheet(true);
  A.render(false);
+}
+H.coupons=()=>{
+ if(!['U09','U10'].includes(A.route.id))return;
+ const items=couponItems(),selected=activeCoupon();
+ const accounts=S.member?D.coupons.map(coupon=>{
+  const discount=quote(items,coupon).couponDiscount;
+  const hint=discount?`可减 ${money(discount)}`:!coupon.online?'仅限门店使用':coupon.status!=='可用'?'优惠券不可用':'未满足使用门槛';
+  return `<button class="ux-listrow" ${attr('pick-coupon',{id:coupon.id})} ${discount?'':'disabled'}><span>${esc(coupon.name)}<br><small class="ux-note">${esc(hint)}</small></span>${selected?.id===coupon.id?A.icon('check'):''}</button>`;
+ }).join(''):'<p class="ux-note ux-spaced">登录后可选择账户优惠券。</p>';
+ A.openSheet('选择优惠券',`<div class="checkout-sheet-options checkout-row-surface"><button class="ux-listrow" ${attr('pick-coupon',{id:'none'})}><span>不使用优惠券</span>${!selected?A.icon('check'):''}</button>${accounts}</div>
+  <form class="ux-form ux-gap" data-form="checkout-coupon-code">
+   ${A.field('优惠券码','code',selected?.id===codeCoupon.id?demoCode:'',{placeholder:'输入优惠券码',maxlength:30})}
+   <p class="ux-note">演示券码 ${demoCode}，用券前满 ¥800 减 ¥100。</p>
+   <p class="ux-error" data-error role="status"></p>
+   <button class="ux-btn" type="submit">使用券码</button>
+  </form>`);
+};
+H['pick-coupon']=data=>{
+ if(!['U09','U10'].includes(A.route.id))return;
+ if(data.id==='none'){setCoupon(null);return;}
+ const coupon=S.member?D.coupons.find(item=>item.id===data.id):null;
+ if(quote(couponItems(),coupon).couponDiscount)setCoupon(coupon);
+};
+const handleForm=A.handleForm;
+A.handleForm=async form=>{
+ if(form.dataset.form!=='checkout-coupon-code')return handleForm(form);
+ if(!['U09','U10'].includes(A.route.id))return;
+ if(form.elements.code.value.trim().toUpperCase()!==demoCode){
+  A.formError(form,'券码无效，请核对后重试。');return;
+ }
+ if(!quote(couponItems(),codeCoupon).couponDiscount){
+  A.formError(form,'当前商品金额未达到用券门槛。');return;
+ }
+ setCoupon(codeCoupon);
 };
 
 function reservationActive(order,now){
@@ -144,6 +212,7 @@ H['checkout-price-confirm']=()=>{
 H['submit-order']=()=>{
  if(A.route.id!=='U10'||!S.member)return;
  const items=S.checkoutItems,selected=address(),state=A.q('state');
+ if(!acceptedTerms.has(items)){A.toast('请先阅读并同意使用条款和退换货政策');return;}
  const existing=drafts.get(items);
  if(existing){
   expireReservation(existing);
@@ -163,6 +232,7 @@ H['submit-order']=()=>{
  const value=quote(items,S.coupon);
  if(S.coupon&&!value.couponDiscount){
   S.coupon=null;
+  if(S.checkoutSource==='bag')S.bagCoupon=null;
   A.render(false);
   A.toast('优惠券已不可用，请确认更新后的金额');
   return;
@@ -173,7 +243,7 @@ H['submit-order']=()=>{
   items:items.map(item=>({...structuredClone(item),name:productFor(item).name})),
   quote:value,total:value.total,coupon:S.coupon?structuredClone(S.coupon):null,
   address:structuredClone(selected),source:S.checkoutSource,
-  sourceBagKeys:S.checkoutSource==='bag'?[...skuQuantities(items)].map(([key,qty])=>({key,qty})):[],
+  sourceBagKeys:['bag','buy-with-bag-line'].includes(S.checkoutSource)?[...skuQuantities(items)].map(([key,qty])=>({key,qty})):[],
   created:new Date(created).toISOString(),
   reservationUntil:created+rules.reservationMinutes*60_000
  };
@@ -193,11 +263,11 @@ V[paymentRoute]=()=>{
  const reservedUntil=order.reservationUntil&&new Date(order.reservationUntil).toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit',hour12:false});
  return `<div class="ux-page checkout-page">
   ${A.heading('微信支付')}
-  <section class="ux-section checkout-payment-amount"><p>应付金额</p><strong>${money(order.total)}</strong><p class="ux-note">订单号 ${esc(order.id)}</p></section>
-  <section class="ux-section"><h3>支付方式</h3><div class="checkout-method"><span>微信支付</span>${A.icon('check')}</div>
+  <section class="ux-section checkout-payment-amount"><div class="checkout-row-surface"><p>应付金额</p><strong>${money(order.total)}</strong>${A.orderMetadata(order)}</div></section>
+  <section class="ux-section"><h3>支付方式</h3>${wechatMethod()}
   <p class="ux-note ux-spaced">${pending?'支付结果确认中，请先查询订单状态。':payable&&reservedUntil?'库存预锁至 '+reservedUntil+'，请在此之前完成支付。':order.status==='已关闭'?'订单已关闭。':'订单状态：'+esc(order.status)}</p>
   <p class="ux-note">本页为支付演示。</p></section>
-  <div class="ux-bottom">${payable?A.button('微信支付','checkout-pay',{id:order.id}):pending?A.button('查询支付结果','query-payment',{id:order.id}):A.button('查看订单','go',{route:'U15',params:JSON.stringify({id:order.id})})}</div>
+  <div class="ux-bottom checkout-bottom">${payable?A.button('微信支付','checkout-pay',{id:order.id}):pending?A.button('查询支付结果','query-payment',{id:order.id}):A.button('查看订单','go',{route:'U15',params:JSON.stringify({id:order.id})})}</div>
  </div>`;
 };
 
@@ -215,7 +285,7 @@ H['checkout-pay']=data=>{
 };
 
 function removePaidItems(order){
- if(order.source!=='bag'||order.bagRemoved)return;
+ if(!order.sourceBagKeys?.length||order.bagRemoved)return;
  for(const ref of order.sourceBagKeys||[]){
   let remaining=ref.qty;
   for(const item of S.bag){
@@ -269,18 +339,58 @@ V.U13=()=>{
   closed:['订单已关闭','库存占用已释放。']
  };
  const [title,description]=messages[state]||['暂无支付结果','可到订单列表查看订单状态。'];
- return `<div class="ux-page checkout-page"><div class="ux-result">
+ return `<div class="ux-page checkout-page">
+ ${A.heading(title)}
+ <section class="ux-section"><div class="ux-result checkout-row-surface">
   <div class="ux-result-icon">${A.icon(state==='success'?'check':state==='pending'?'clock':'order')}</div>
-  <h2>${title}</h2><p class="ux-muted">${description}</p>
+  <p class="ux-muted">${description}</p>
   ${order?`<p>${esc(order.id)} · ${money(order.total)}</p>`:''}
   <p class="ux-note">支付结果为本地演示。</p>
-  ${state==='pending'?A.button('查询支付结果','query-payment',{id:order.id}):['cancelled','failed'].includes(state)?A.button('返回微信支付','pay-demo',{id:order.id}):''}
-  ${order?A.button('查看订单','go',{route:'U15',params:JSON.stringify({id:order.id})},'outline'):A.button('查看订单列表','go',{route:'U14'},'outline')}
+ </div></section>
+ <div class="ux-section checkout-result-links">
   ${state==='success'?`<button class="checkout-campaign" ${go('U22')}>
    <span class="checkout-campaign-copy"><small>VUORI 社区</small><strong>发现社区活动</strong><span>浏览社区活动 ${A.icon('arrow')}</span></span>
   </button>`:''}
   ${A.link('继续选购','U03')}
+ </div>
+ <div class="ux-bottom checkout-bottom">
+  ${state==='pending'?A.button('查询支付结果','query-payment',{id:order.id}):['cancelled','failed'].includes(state)?A.button('返回微信支付','pay-demo',{id:order.id}):''}
+  ${order?A.button('查看订单','go',{route:'U15',params:JSON.stringify({id:order.id})},state==='pending'||['cancelled','failed'].includes(state)?'outline':''):A.button('查看订单列表','go',{route:'U14'})}
  </div></div>`;
+};
+
+const render=A.render;
+const system=A.$('.system');
+const defaultSystem=system.innerHTML;
+A.render=function(...args){
+ const {id,params}=A.parse();
+ const wechatAddress=id==='U11'&&params.wechat==='1';
+ const addressPage=['U11','U12'].includes(id)&&!wechatAddress;
+ const active=wechatAddress||addressPage||['U10','U13',paymentRoute].includes(id);
+ document.body.classList.toggle('checkout-mode',active);
+ document.body.classList.toggle('wechat-address-mode',wechatAddress);
+ document.body.classList.toggle('address-management-mode',addressPage);
+ if(!active&&system.querySelector('.checkout-system-icons'))system.innerHTML=defaultSystem;
+ render(...args);
+ if(!active)return;
+ system.innerHTML=`<span class="time">9:41</span><span class="checkout-system-icons">${icon('signal')}${icon('wifi')}${icon('battery')}</span>`;
+ if(wechatAddress){
+  A.$('#app-header').innerHTML=`<button type="button" ${attr('back')} aria-label="返回">${icon('back')}</button><strong>我的地址</strong><button type="button" ${attr('address-form')} aria-label="添加新地址"><span class="wechat-address-plus">${A.icon('plus')}</span></button>`;
+  return;
+ }
+ if(addressPage){
+  A.$('#app-header').innerHTML=`<button class="address-nav-back" ${attr(id==='U12'?'address-form-back':'back')} aria-label="返回">${icon('back')}</button>
+   <img class="address-nav-brand" src="assets/wordmark.png.webp?v=20261029-images-all" alt="Vuori">
+   <div class="checkout-nav-menu" aria-label="微信小程序菜单">${icon('menu')}<i aria-hidden="true"></i>${icon('exit')}</div>`;
+  const form=A.$('#app-content .address-form');
+  if(form)A.syncAddressForm(form);
+  return;
+ }
+ A.$('#app-header').innerHTML=`<div class="checkout-nav-left" role="group" aria-label="页面导航">
+  <button ${attr('back')} aria-label="返回">${icon('back')}</button><i aria-hidden="true"></i>
+  <button ${attr('root',{route:'U01'})} aria-label="首页"><img src="assets/bag2075/header-home.svg" alt=""></button>
+ </div>
+ <div class="checkout-nav-menu" aria-label="微信小程序菜单">${icon('menu')}<i aria-hidden="true"></i>${icon('exit')}</div>`;
 };
 
 const orderList=V.U14;

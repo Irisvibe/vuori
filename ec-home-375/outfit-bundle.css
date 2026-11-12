@@ -1,15 +1,41 @@
-/* New composition using brand spacing, type, swatches and sheet motion. */
-#ux-sheet:has([data-component=outfit-bundle]){height:min(82dvh,740px);max-height:82dvh;overflow:hidden;background:#fff}
-#ux-sheet:has([data-component=outfit-bundle]) .ux-sheet-content{padding:0;flex:1;min-height:0;overflow:hidden;height:calc(100% - 60px)}
+#ux-sheet:has([data-component=outfit-bundle]) {
+  height:min(763px, calc(100dvh - 48px));
+  max-height:none;
+  overflow:hidden;
+  background:var(--vui-semantic-color-surface,#f8f8f8);
+}
+#ux-sheet:has([data-component=outfit-bundle]) .ux-sheet-head{display:none}
+#ux-sheet:has([data-component=outfit-bundle]) .ux-sheet-content{padding:0;height:100%;overflow:hidden}
 .ob-panel{height:100%;display:flex;flex-direction:column;min-height:0;color:#333;font-family:'Aktiv Grotesk','Noto Sans CJK SC';font-synthesis:none}
-.ob-intro{padding:0 16px 16px;font-size:12px;line-height:18px;color:#5a5a5a;flex:none}
-.ob-items{overflow:auto;min-height:0;flex:1;overscroll-behavior:contain;padding:0 16px;scrollbar-width:thin}
-.ob-item{padding:20px 0;border-top:1px solid #ededed}.ob-item:first-child{padding-top:0;border-top:0}
+.ob-items{overflow:auto;min-height:0;flex:1;overscroll-behavior:contain;padding:20px var(--vui-semantic-space-gutter,16px) 0;scrollbar-width:none}
+.ob-item{padding:20px 0;border-top:1px solid #ededed}
+.ob-item:first-child{padding-top:0;border-top:0}
 .ob-summary{display:grid;grid-template-columns:20px 72px minmax(0,1fr);gap:12px;align-items:start}
-.ob-check{position:relative;width:20px;height:20px;border:1px solid #868686;display:grid;place-items:center;font-size:14px;margin-top:4px}.ob-check:before{content:'';position:absolute;inset:-10px}.ob-check[aria-pressed=true]{background:#333;color:#fff;border-color:#333}
+.ob-item:first-child .ob-summary>div{padding-right:36px}
+.ob-check{position:relative;width:18px;height:18px;margin-top:3px;border:0;background:url("assets/bundle2075/unchecked.svg") center no-repeat}
+.ob-check::before{content:'';position:absolute;inset:-5px}
+.ob-check[aria-pressed=true]{background-image:url("assets/bundle2075/checked.svg")}
 .ob-summary>img{width:72px;height:90px;object-fit:cover;background:#f8f8f8}
-.ob-summary h3{font-size:12px;line-height:18px;font-weight:500;margin:0 0 6px}.ob-summary p{font-size:12px;line-height:18px;color:#5a5a5a;margin:0 0 6px}.ob-summary strong{display:block;font-size:12px;line-height:18px;font-weight:500}.ob-summary small{font-size:10px;line-height:16px;color:#5a5a5a}
-.ob-options{padding:12px 0 0 32px}.ob-colors{display:flex;gap:6px;flex-wrap:wrap}.ob-colors button{width:20px;height:20px;position:relative;border:1px solid transparent;border-radius:50%;display:grid;place-items:center;margin-block:6px}.ob-colors button:after{content:'';position:absolute;inset:-3px}.ob-colors button i{width:14px;height:14px;border-radius:50%;background:var(--tone)}.ob-colors button[aria-pressed=true]{border-color:#333}
-.ob-size-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12px;line-height:18px}.ob-size-heading>button{min-height:40px;text-decoration:underline;text-underline-offset:4px;font-size:10px}
-.ob-sizes{display:flex;flex-wrap:wrap;gap:6px}.ob-sizes button{min-width:40px;height:40px;border:1px solid #c6c6c6;font-size:12px}.ob-sizes button[aria-pressed=true]{border-color:#333;background:#333;color:#fff}.ob-sizes button:disabled{color:#868686;background:linear-gradient(to top right,transparent calc(50% - .5px),#c6c6c6 50%,transparent calc(50% + .5px))}
-.ob-unselected .ob-options{opacity:.55}.ob-footer{padding:12px 16px max(16px,env(safe-area-inset-bottom));border-top:1px solid #ededed;flex:none;background:#fff}.ob-error{font-size:10px;line-height:16px;min-height:16px;color:#5a5a5a;margin:0 0 8px}.ob-total{display:flex;justify-content:space-between;gap:8px;font-size:12px;line-height:18px;margin-bottom:12px}.ob-total strong{font-weight:500}.ob-submit{width:100%;min-height:48px;background:#333;color:#f8f8f8;font-size:12px}.ob-submit:disabled{background:#ededed;color:#868686}.ob-panel button:focus-visible{outline:1px solid #333;outline-offset:3px}
+.ob-summary h3{font-size:12px;line-height:18px;font-weight:500;margin:0 0 6px}
+.ob-summary p{font-size:12px;line-height:18px;color:#5a5a5a;margin:0 0 6px}
+.ob-summary .ob-quantity{font-size:10px;line-height:16px;margin:2px 0 0}
+.ob-options{padding:20px 0 0 32px}
+.ob-colors{--ob-swatch-size:var(--vui-component-quick-buy-swatch-size,26px);display:flex;gap:var(--vui-component-quick-buy-swatch-gap,12px);flex-wrap:wrap}
+.ob-colors button{width:var(--ob-swatch-size);height:var(--ob-swatch-size);flex:none;position:relative;border:1px solid #c6c6c6;border-radius:50%;display:grid;place-items:center;background:var(--tone)}
+.ob-colors button::after{content:'';position:absolute;inset:-3px}
+.ob-colors button[aria-pressed=true]{border-color:var(--vui-semantic-color-text,#333);background:transparent}
+.ob-colors button[aria-pressed=true] i{width:calc(var(--ob-swatch-size) - 6px);height:calc(var(--ob-swatch-size) - 6px);border-radius:50%;background:var(--tone)}
+.ob-size-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12px;line-height:18px}
+.ob-size-heading>button{min-height:40px;text-decoration:underline;text-underline-offset:2px;font-size:10px}
+.ob-sizes{column-gap:6px}
+.ob-sizes>button{width:clamp(40px, calc((100% - 24px)/5), var(--vui-component-quick-buy-size-width,62px));border-radius:2px;border:1px solid #c6c6c6;font-size:12px}
+.ob-sizes button[aria-pressed=true]{border-color:#333;background:#333;color:#fff}
+.ob-sizes button:disabled{color:#868686;background:linear-gradient(to top right,transparent calc(50% - .5px),#c6c6c6 50%,transparent calc(50% + .5px))}
+.ob-unselected .ob-options{opacity:.55}
+.ob-footer{padding:12px var(--vui-semantic-space-gutter,16px) max(32px,env(safe-area-inset-bottom));border-top:1px solid #ededed;flex:none;background:inherit}
+.ob-error{font-size:12px;line-height:20px;min-height:20px;color:#5a5a5a;margin:0}
+.ob-total{display:flex;justify-content:space-between;gap:8px;font-size:12px;line-height:18px;padding:8px 0 12px}
+.ob-total strong{font-weight:500}
+.ob-submit{width:100%;min-height:44px;background:#333;color:#f8f8f8;font-size:12px}
+.ob-submit:disabled{background:#c6c6c6;color:#fff}
+.ob-panel button:focus-visible{outline:1px solid #333;outline-offset:3px}
